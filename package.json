@@ -1,0 +1,35 @@
+{
+  "name": "slack-gallery-quiz",
+  "version": "0.0.1",
+  "description": "A quiz using Slack account images and asking the user to recognize the people",
+  "main": "src/index.ts",
+  "scripts": {
+    "build:meh": "tsc -b src",
+    "build": "tsc",
+    "start": "node built/index.js",
+    "test:watch": "jest --watchAll"
+  },
+  "author": "mjviljan",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/client": "^4.8.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.9",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.4",
+    "typescript": "^3.1.6"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testMatch": [
+      "<rootDir>/test/**/*.test.ts"
+    ]
+  }
+}

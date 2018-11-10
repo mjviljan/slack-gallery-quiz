@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2017",
+      "esnext.asynciterable"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./built",
+    "strict": true,
+    "target": "es2017"
+  },
+  "include": [
+    "./src/*"
+  ]
+}
