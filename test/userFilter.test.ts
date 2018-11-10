@@ -12,5 +12,6 @@ describe('UserFilter', () => {
     it('should return only active, non-bot, non-guest users (IDs)', () => {
         const users: Array<QuizUser> = activeNonBotMainUsersOnly(fakeUsers)
         expect(users.map(u => u.nickname)).toEqual(["jamie", "dude"])
+        expect(users.map(u => u.firstName)).toEqual(["Jamie", "Dude"])
     })
 })

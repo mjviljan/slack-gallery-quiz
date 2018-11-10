@@ -7,14 +7,15 @@ export type UserListMember = {
     name: string,
     profile: {
         display_name: string,
+        first_name: string,
         image_24: string,
-        image_32: string, // optional
-        image_48: string, // optional
-        image_72: string, // optional
-        image_192: string, // optional
-        image_512: string, // optional
-        image_1024: string, // optional
-        image_original: string // optional
+        image_32?: string,
+        image_48?: string,
+        image_72?: string,
+        image_192?: string,
+        image_512?: string,
+        image_1024?: string,
+        image_original?: string
     }
 }
 
@@ -23,6 +24,7 @@ export type UserListFetchResult = WebAPICallResult & {
 }
 
 export type QuizUser = {
+    imageUrl: string,
     nickname: string,
-    imageUrl: string
+    firstName: string
 }
