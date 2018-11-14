@@ -14,4 +14,12 @@ describe('UserFilter', () => {
         expect(users.map(u => u.nickname)).toEqual(["jamie", "dude"])
         expect(users.map(u => u.firstName)).toEqual(["Jamie", "Dude"])
     })
+
+    it('should return image URL of as big an image as possible', () => {
+        const users: Array<QuizUser> = activeNonBotMainUsersOnly(fakeUsers)
+        expect(users.map(u => u.imageUrl)).toEqual([
+            "https://i1.wp.com/a.slack-edge.com/7fa9/img/avatars/ava_0001-192.png",
+            "https://i1.wp.com/a.slack-edge.com/7fa9/img/avatars/ava_0002-512.png"
+        ])
+    })
 })
