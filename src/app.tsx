@@ -5,21 +5,27 @@ import "firebase/auth"
 import "./firebase"
 import * as dotenv from "dotenv"
 import { LoadingSpinner } from "./components/loadingSpinner"
+import { Quiz } from "./components/quiz"
 
 dotenv.config()
 
-firebase.auth().onAuthStateChanged(function (user) {
+const root = document.getElementById('root')
+
+ReactDOM.render(
+    <LoadingSpinner />,
+    root
+)
+
+const unsubscribe = firebase.auth().onAuthStateChanged(user => {
     if (user) {
-        console.log('User logged in')
+        ReactDOM.render(
+            <Quiz />,
+            root
+        )
     } else {
-        console.log('User NOT logged in')
         const provider = new firebase.auth.GoogleAuthProvider()
         provider.setCustomParameters({ hd: process.env.GOOGLE_ORGANIZATION })
         firebase.auth().signInWithRedirect(provider)
     }
-});
-
-ReactDOM.render(
-    <LoadingSpinner />,
-    document.getElementById('root')
-);
+    unsubscribe()
+})
