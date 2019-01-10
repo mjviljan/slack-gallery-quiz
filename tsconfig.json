@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "lib": [
       "es2017",
-      "esnext.asynciterable"
+      "esnext.asynciterable",
+      "dom"
     ],
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "./built",
+    "outDir": "./dist",
     "strict": true,
     "target": "es2017"
   },
