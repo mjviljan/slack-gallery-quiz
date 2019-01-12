@@ -1,0 +1,75 @@
+.LoadingSpinner {
+    @clock-color: cadetblue;
+
+    width: 50vmin;
+    height: 50vmin;
+    margin: auto;
+
+    > .Circle {
+        @border-width: 20px;
+
+        width: 100%;
+        height: 100%;
+        border: @border-width solid @clock-color;
+        border-radius: 50%;
+        margin-top: -@border-width;
+        margin-left: -@border-width;
+        position: relative;
+
+        .Arm {
+            @arm-width: 6%;
+
+            background-color: @clock-color;
+            position: absolute;
+            transform-origin: bottom center;
+            border-radius: 99999px;
+            width: @arm-width;
+            left: calc(50% - @arm-width / 2);
+        }
+        > .Hub {
+            .Arm();
+            @hub-size: @arm-width + 2%;
+            width: @hub-size;
+            height: @hub-size;
+            top: calc(50% - @hub-size / 2);
+            left: calc(50% - @hub-size / 2);
+        }
+        > .ShortArm {
+            .Arm();
+            @short-arm-length: 30%;
+
+            height: @short-arm-length;
+            top: calc(50% - @short-arm-length);
+            animation: Rotate 4s linear infinite;
+        }
+        > .LongArm {
+            .Arm();
+            @long-arm-length: 48%;
+
+            height: @long-arm-length;
+            top: calc(50% - @long-arm-length);
+            animation: Rotate 2s linear infinite;
+        }
+    }
+
+        > .Text {
+            width: 100vw;
+            position: absolute;
+            left: 0;
+            top: calc(50% - 11vmin);
+            text-align: center;
+
+            > p {
+                font-family: Helvetica, sans-serif;
+                margin: 0;
+                padding: 0;
+                z-index: 10;
+                font-size: 18vmin;
+                letter-spacing: 2vmin;
+                text-transform: uppercase;
+                color: white;
+                text-shadow: 0 0 0.02em white, 0 0 0.2em @clock-color, 0 0 1em @clock-color;
+                animation: Pulsate 2s ease-in-out infinite;
+            }
+        }
+}

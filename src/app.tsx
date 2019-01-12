@@ -1,11 +1,14 @@
+import "./styles/defaults.less"
+import "./styles/keyframes.less"
+
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import * as firebase from 'firebase/app'
 import "firebase/auth"
 import "./firebase"
 import * as dotenv from "dotenv"
-import { LoadingSpinner } from "./components/loadingSpinner"
-import { Quiz } from "./components/quiz"
+import { LoadingSpinner } from "./components/LoadingSpinner"
+import { Quiz } from "./components/Quiz"
 
 dotenv.config()
 
@@ -17,7 +20,7 @@ ReactDOM.render(
 )
 
 const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-    if (user) {
+    if (user && user.email && user.email.endsWith("@" + process.env.GOOGLE_ORGANIZATION)) {
         ReactDOM.render(
             <Quiz />,
             root

@@ -7,7 +7,8 @@
     "build": "tsc && parcel build src/index.html",
     "deploy": "yarn build && firebase deploy",
     "start": "parcel src/index.html",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "tsc:watch": "tsc -w"
   },
   "author": "mjviljan",
   "license": "MIT",
@@ -26,6 +27,7 @@
     "firebase": "^5.7.2",
     "firebase-tools": "^6.2.2",
     "jest": "^23.6.0",
+    "less": "^3.9.0",
     "parcel-bundler": "^1.11.0",
     "ts-jest": "^23.10.4",
     "typescript": "^3.1.6"
