@@ -22,9 +22,3 @@ export type UserListMember = {
 export type UserListFetchResult = WebAPICallResult & {
     members: Array<UserListMember>
 }
-
-export type QuizUser = {
-    imageUrl: string,
-    nickname: string,
-    firstName: string
-}

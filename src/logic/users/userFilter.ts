@@ -1,4 +1,5 @@
-import {QuizUser, UserListFetchResult, UserListMember} from "./types"
+import {UserListFetchResult, UserListMember} from "./types"
+import {QuizUser} from "../quiz/types"
 
 function getBiggestImageUrl(user: UserListMember): string {
     return user.profile.image_1024

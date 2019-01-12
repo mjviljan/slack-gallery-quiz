@@ -1,7 +1,27 @@
-#Quiz {
-    width: 50vmin;
-    height: 50vmin;
+.Quiz {
+    width: 75vmin;
+    height: 90vmin;
     margin: auto;
-    background-color: cadetblue;
-    animation: Rotate 2s linear infinite;
+
+    > img {
+        width: 70vmin;
+        height: 70vmin;
+        border-radius: 25%;
+    }
+
+    > .Question {
+        width: fit-content;
+        font-size: 7vmin;
+        color: cadetblue;
+        margin: 2vmin auto;
+    }
+
+    > form > input[type=text] {
+        width: 100%;
+        // line-height: 8vmin;
+        font-size: 8vmin;
+        border: none;
+        border-radius: 3vmin;
+        text-align: center;
+    }
 }

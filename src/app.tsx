@@ -9,6 +9,7 @@ import "./firebase"
 import * as dotenv from "dotenv"
 import { LoadingSpinner } from "./components/LoadingSpinner"
 import { Quiz } from "./components/Quiz"
+import { getUsers } from "./logic/users"
 
 dotenv.config()
 
@@ -21,10 +22,13 @@ ReactDOM.render(
 
 const unsubscribe = firebase.auth().onAuthStateChanged(user => {
     if (user && user.email && user.email.endsWith("@" + process.env.GOOGLE_ORGANIZATION)) {
-        ReactDOM.render(
-            <Quiz />,
-            root
-        )
+        (async () => {
+            const users = await getUsers()
+            ReactDOM.render(
+                <Quiz users={users} />,
+                root
+            )
+        })()
     } else {
         const provider = new firebase.auth.GoogleAuthProvider()
         provider.setCustomParameters({ hd: process.env.GOOGLE_ORGANIZATION })
