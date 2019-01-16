@@ -1,47 +1,42 @@
 import './index.less'
 
 import { QuizUser } from '../../logic/quiz/types'
+import { QuestionForm } from "../QuestionForm"
+import { Statistics } from "../Statistics"
 import shuffle from "shuffle.ts"
 import * as React from "react"
 
-export interface QuizProps { users: Array<QuizUser>}
+export interface QuizProps { users: Array<QuizUser> }
 
-export class Quiz extends React.Component<QuizProps, QuizProps> {
+export interface QuizState { remainingUsers: Array<QuizUser>, correct: number }
+
+export class Quiz extends React.Component<QuizProps, QuizState> {
     constructor(props: QuizProps) {
         super(props)
         console.log('Constructing quiz')
         this.state = {
-            users: shuffle(props.users)
+            remainingUsers: shuffle(props.users),
+            correct: 0
         }
     }
 
-    submitAnswer = (event : React.FormEvent): void => {
-        event.preventDefault()
+    submitAnswer = (answer : String): void => {
         this.setState({
-            users: this.state.users.slice(1)
+            remainingUsers: this.state.remainingUsers.slice(1),
+            correct: this.state.correct + 1
         })
-        const answerField = document.getElementById('answer') as HTMLInputElement
-        if (answerField) {
-            answerField.value = ""
-        }
     }
 
     render() {
         return (
             <div className="Quiz">
-                <img src={this.state.users[0].imageUrl} />
-                <div className="Question">Who is this 🐶?</div>
-                <form onSubmit={this.submitAnswer}>
-                    <input id="answer" type="text" />
-                </form>
+                <div className="QuestionContainer">
+                    <QuestionForm user={this.state.remainingUsers[0]} answerHandler={this.submitAnswer} />
+                </div>
+                <div className="StatisticsContainer">
+                    <Statistics remaining={this.state.remainingUsers.length} correct={this.state.correct} />
+                </div>
             </div>
         );
-    }
-
-    componentDidMount() {
-        const answerField = document.getElementById('answer') as HTMLInputElement
-        if (answerField) {
-            answerField.focus()
-        }
     }
 }

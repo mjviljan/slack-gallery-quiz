@@ -4,7 +4,7 @@ import {QuizUser} from "../quiz/types"
 import {activeNonBotMainUsersOnly} from "./userFilter"
 
 async function getSlackUsers(token: string): Promise<Array<QuizUser>> {
-    const web = new WebClient(token);
+    const web = new WebClient(token)
     return Promise.resolve(activeNonBotMainUsersOnly(await web.users.list() as UserListFetchResult))
 }
 
