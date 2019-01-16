@@ -8,7 +8,7 @@ import * as React from "react"
 
 export interface QuizProps { users: Array<QuizUser> }
 
-export interface QuizState { remainingUsers: Array<QuizUser>, currentUser: QuizUser, correct: number }
+export interface QuizState { remainingUsers: Array<QuizUser>, currentUser: QuizUser, correct: number, quizEnded: boolean }
 
 export class Quiz extends React.Component<QuizProps, QuizState> {
     constructor(props: QuizProps) {
@@ -17,11 +17,12 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         this.state = {
             remainingUsers: shuffledUsers,
             currentUser: shuffledUsers[0],
-            correct: 0
+            correct: 0,
+            quizEnded: false
         }
     }
 
-    submitAnswer = (answer : String): void => {
+    submitAnswer = (answer : string): void => {
         const lowerCaseAnswer = answer.toLowerCase()
         const correctAnswers = [
             this.state.currentUser.nickname.toLowerCase(),
@@ -30,11 +31,15 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
 
         if (correctAnswers.indexOf(lowerCaseAnswer) >= 0) {
             console.log('Correct answer!')
-            this.setState({
-                remainingUsers: this.state.remainingUsers.slice(1),
-                currentUser: this.state.remainingUsers[1],
-                correct: this.state.correct + 1
-            })
+            if (this.state.remainingUsers.length > 1) {
+                this.setState({
+                    remainingUsers: this.state.remainingUsers.slice(1),
+                    currentUser: this.state.remainingUsers[1],
+                    correct: this.state.correct + 1
+                })
+            } else {
+                this.setState({quizEnded: true})
+            }
         } else {
             console.log('Wrong answer :(')
             const allUsers = this.state.remainingUsers.slice(1)
@@ -47,15 +52,21 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
     }
 
     render() {
-        return (
-            <div className="Quiz">
-                <div className="QuestionContainer">
-                    <QuestionForm user={this.state.remainingUsers[0]} answerHandler={this.submitAnswer} />
+        if (!this.state.quizEnded) {
+            return (
+                <div className="Quiz">
+                    <div className="QuestionContainer">
+                        <QuestionForm user={this.state.currentUser} answerHandler={this.submitAnswer} />
+                    </div>
+                    <div className="StatisticsContainer">
+                        <Statistics remaining={this.state.remainingUsers.length} correct={this.state.correct} />
+                    </div>
                 </div>
-                <div className="StatisticsContainer">
-                    <Statistics remaining={this.state.remainingUsers.length} correct={this.state.correct} />
-                </div>
-            </div>
-        );
+            )
+        } else {
+            return (
+                <div>Game ended</div>
+            )
+        }
     }
 }
