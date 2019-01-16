@@ -8,23 +8,42 @@ import * as React from "react"
 
 export interface QuizProps { users: Array<QuizUser> }
 
-export interface QuizState { remainingUsers: Array<QuizUser>, correct: number }
+export interface QuizState { remainingUsers: Array<QuizUser>, currentUser: QuizUser, correct: number }
 
 export class Quiz extends React.Component<QuizProps, QuizState> {
     constructor(props: QuizProps) {
         super(props)
-        console.log('Constructing quiz')
+        const shuffledUsers = shuffle(props.users)
         this.state = {
-            remainingUsers: shuffle(props.users),
+            remainingUsers: shuffledUsers,
+            currentUser: shuffledUsers[0],
             correct: 0
         }
     }
 
     submitAnswer = (answer : String): void => {
-        this.setState({
-            remainingUsers: this.state.remainingUsers.slice(1),
-            correct: this.state.correct + 1
-        })
+        const lowerCaseAnswer = answer.toLowerCase()
+        const correctAnswers = [
+            this.state.currentUser.nickname.toLowerCase(),
+            this.state.currentUser.firstName.toLowerCase()
+        ]
+
+        if (correctAnswers.indexOf(lowerCaseAnswer) >= 0) {
+            console.log('Correct answer!')
+            this.setState({
+                remainingUsers: this.state.remainingUsers.slice(1),
+                currentUser: this.state.remainingUsers[1],
+                correct: this.state.correct + 1
+            })
+        } else {
+            console.log('Wrong answer :(')
+            const allUsers = this.state.remainingUsers.slice(1)
+            allUsers.push(this.state.currentUser)
+            this.setState({
+                remainingUsers: allUsers,
+                currentUser: allUsers[0]
+            })
+        }
     }
 
     render() {
