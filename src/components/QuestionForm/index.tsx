@@ -27,7 +27,7 @@ export class QuestionForm extends React.Component<QuestionFormProps, {guess : st
         return (
             <div className="QuestionForm">
                 <img src={this.props.user.imageUrl} />
-                <div className="Question">Who is this 🐶?</div>
+                <div className="Question">Who is this?</div>
                 <form onSubmit={this.submitAnswer}>
                     <input id="answer" type="text" value={this.state.guess} onChange={this.handleGuessChange} />
                 </form>

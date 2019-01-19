@@ -10,9 +10,15 @@ export class Statistics extends React.Component<StatisticsContainerProps, {}> {
     render() {
         return (
             <div className="Statistics">
-                <div className="Remaining">🐶 {this.props.remaining}</div>
-                <div className="Correct">✓ {this.props.correct}</div>
+                <div className="Remaining">
+                    <div className="Label">🐶</div>
+                    <div className="Value">{this.props.remaining}</div>
+                </div>
+                <div className="Correct">
+                    <div className="Label">✓</div>
+                    <div className="Value">{this.props.correct}</div>
+                </div>
             </div>
-        );
+        )
     }
 }
