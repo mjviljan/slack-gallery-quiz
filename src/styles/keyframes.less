@@ -18,3 +18,40 @@
         opacity: 0;
     }
 }
+
+@wiggle-degrees: 5deg;
+
+@keyframes Wiggle-CW {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(@wiggle-degrees);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(-@wiggle-degrees);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+@keyframes Wiggle-CCW {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-@wiggle-degrees);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(@wiggle-degrees);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}

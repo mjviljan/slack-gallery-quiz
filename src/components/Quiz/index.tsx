@@ -3,6 +3,7 @@ import './index.less'
 import { QuizUser } from '../../logic/quiz/types'
 import { QuestionForm } from "../QuestionForm"
 import { Statistics } from "../Statistics"
+import { QuizFinished } from "../QuizFinished"
 import shuffle from "shuffle.ts"
 import * as React from "react"
 
@@ -65,7 +66,9 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             )
         } else {
             return (
-                <div>Game ended</div>
+                <div className="Finished">
+                    <QuizFinished />
+                </div>
             )
         }
     }
