@@ -18,6 +18,7 @@ export function activeNonBotMainUsersOnly(userList: UserListFetchResult): Array<
         .filter((u: UserListMember) => !u.is_restricted)
         .filter((u: UserListMember) => u.name !== 'slackbot')
         .map((u: UserListMember) => ({
+            id: u.id,
             imageUrl: getBiggestImageUrl(u),
             nickname: u.profile.display_name,
             firstName: u.profile.first_name

@@ -4,6 +4,7 @@ import { FilterSelection } from "../../logic/quiz/types"
 import * as React from "react"
 
 export interface FilterProps {
+    failedGuessUsers: Array<string>,
     selectedFilter: FilterSelection,
     filterSelectionHandler: (selection: FilterSelection) => void
 }
@@ -28,7 +29,7 @@ export class Filter extends React.Component<FilterProps, {}> {
                     value={FilterSelection.RND10}>Random 10</button>
                 <button
                     className={this.props.selectedFilter === FilterSelection.FAILURES ? "active" : ""}
-                    disabled
+                    disabled={this.props.failedGuessUsers.length === 0}
                     type="button"
                     onClick={this.buttonClick}
                     value={FilterSelection.FAILURES}>Latest failed</button>

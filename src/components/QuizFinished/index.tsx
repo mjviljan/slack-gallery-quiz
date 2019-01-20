@@ -1,12 +1,22 @@
-import './index.less'
+import "./index.less"
 
-import { QuizUser } from '../../logic/quiz/types'
-import { QuestionForm } from "../QuestionForm"
-import { Statistics } from "../Statistics"
-import shuffle from "shuffle.ts"
+import { FilterSelection } from "../../logic/quiz/types"
 import * as React from "react"
 
-export class QuizFinished extends React.Component<{}, {}> {
+export interface QuizFinishedProps {
+    restartFunction: (() => void) | null
+}
+
+export class QuizFinished extends React.Component<QuizFinishedProps, {}> {
+
+    onRestartClicked = (clickEvent : React.MouseEvent) => {
+        clickEvent.preventDefault()
+
+        if (this.props.restartFunction) {
+            this.props.restartFunction()
+        }
+    }
+
     render() {
         return (
             <div className="QuizFinished">
@@ -23,6 +33,9 @@ export class QuizFinished extends React.Component<{}, {}> {
                         <div className="WiggleLetterCW">b</div>
                         <div className="WiggleLetterCCW">!</div>
                     </div>
+                </div>
+                <div className={this.props.restartFunction ? "RestartLink" : "Hidden"}>
+                    <a href="#" onClick={this.onRestartClicked}>Restart quiz with failed guesses only ↺</a>
                 </div>
             </div>
         )

@@ -1,6 +1,7 @@
-import {WebAPICallResult} from "@slack/client"
+import { WebAPICallResult } from "@slack/client"
 
 export type UserListMember = {
+    id: string,
     deleted: boolean,
     is_bot: boolean,
     is_restricted: boolean,

@@ -1,9 +1,17 @@
+@import "../../styles/defaults.less";
+
 .QuizFinished {
     width: 100%;
     height: 100%;
-    display: flex;
+    position: relative;
 
     > .Congratulations {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: fit-content;
         margin: auto;
         font-size: 20vmin;
         text-transform: uppercase;
@@ -22,5 +30,27 @@
                 animation: Wiggle-CCW .3s linear infinite;
             }
         }
+    }
+
+    > .RestartLink {
+        position: absolute;
+        bottom: 13vmin;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 4vmin;
+
+        > a {
+            color: @main-text-color;
+            text-decoration: none;
+            
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    > .Hidden {
+        display: none;
     }
 }

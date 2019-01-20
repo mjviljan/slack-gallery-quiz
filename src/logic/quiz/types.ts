@@ -1,4 +1,5 @@
 export type QuizUser = {
+    id: string,
     imageUrl: string,
     nickname: string,
     firstName: string

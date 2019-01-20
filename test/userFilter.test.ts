@@ -1,5 +1,5 @@
-import {QuizUser} from "../src/types"
-import {activeNonBotMainUsersOnly} from "../src/userFilter"
+import {QuizUser} from "../src/logic/quiz/types"
+import {activeNonBotMainUsersOnly} from "../src/logic/users/userFilter"
 
 const fakeUsers = require('./test_data.json')
 
@@ -11,6 +11,7 @@ describe('UserFilter', () => {
 
     it('should return only active, non-bot, non-guest users (IDs)', () => {
         const users: Array<QuizUser> = activeNonBotMainUsersOnly(fakeUsers)
+        expect(users.map(u => u.id)).toEqual(["FAKEUID01", "FAKEUID02"])
         expect(users.map(u => u.nickname)).toEqual(["jamie", "dude"])
         expect(users.map(u => u.firstName)).toEqual(["Jamie", "Dude"])
     })

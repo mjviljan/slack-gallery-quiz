@@ -19,6 +19,7 @@ export interface QuizState {
     correctAnswers: number,
     answerCorrect: boolean,
     showCorrectAnswer: boolean,
+    failedGuessUsers: Array<string>,
     quizEnded: boolean
 }
 
@@ -28,13 +29,15 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         super(props)
         this.state = this.getQuizStartState(FilterSelection.ALL)
     }
-    
-    getQuizStartState = (filterSelection : FilterSelection) : QuizState => {
+
+    getQuizStartState = (filterSelection: FilterSelection): QuizState => {
         const shuffledUsers = shuffle(this.props.users)
 
         let includedUsers: Array<QuizUser>
         if (filterSelection === FilterSelection.RND10) {
             includedUsers = shuffledUsers.slice(0, 10)
+        } else if (filterSelection === FilterSelection.FAILURES) {
+            includedUsers = shuffledUsers.filter(u => this.state.failedGuessUsers.indexOf(u.id) >= 0)
         } else {
             includedUsers = shuffledUsers
         }
@@ -45,12 +48,17 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             correctAnswers: 0,
             answerCorrect: false,
             showCorrectAnswer: false,
+            failedGuessUsers: [],
             quizEnded: false
         }
     }
 
     onFilterSelected = (selection: FilterSelection) => {
         this.setState(this.getQuizStartState(selection))
+    }
+
+    restartWithFailedGuessed = () => {
+        this.setState(this.getQuizStartState(FilterSelection.FAILURES))
     }
 
     isAnswerCorrect = (answer: string): boolean => {
@@ -76,9 +84,15 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                 this.setState({ quizEnded: true })
             }
         } else {
+            const failedGuesses = this.state.failedGuessUsers
+            const currentUserId = this.state.currentUser.id
+            if (failedGuesses.indexOf(currentUserId) === -1) {
+                failedGuesses.push(currentUserId)
+            }
             this.setState({
                 answerCorrect: false,
-                showCorrectAnswer: true
+                showCorrectAnswer: true,
+                failedGuessUsers: failedGuesses
             })
             setTimeout(() => {
                 const allUsers = this.state.remainingUsers.slice(1)
@@ -112,6 +126,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                             remaining={this.state.remainingUsers.length}
                             correctAnswers={this.state.correctAnswers}
                             answerCorrect={this.state.answerCorrect}
+                            failedGuessUsers={this.state.failedGuessUsers}
                             selectedFilter={this.state.selectedFilter}
                             filterSelectionHandler={this.onFilterSelected} />
                     </div>
@@ -120,7 +135,9 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         } else {
             return (
                 <div className="Finished">
-                    <QuizFinished />
+                    <QuizFinished
+                        restartFunction={this.state.failedGuessUsers.length > 0 ? this.restartWithFailedGuessed : null}
+                    />
                 </div>
             )
         }
