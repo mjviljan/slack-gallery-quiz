@@ -2,7 +2,7 @@ import './index.less'
 
 import * as React from "react"
 
-export interface StatisticsProps { remaining: number, correct: number, previousAnswerCorrect: boolean }
+export interface StatisticsProps { remaining: number, correctAnswers: number, answerCorrect: boolean }
 
 export class Statistics extends React.Component<StatisticsProps, {}> {
     _correctMarker: React.RefObject<HTMLDivElement>
@@ -14,7 +14,7 @@ export class Statistics extends React.Component<StatisticsProps, {}> {
 
     componentDidUpdate() {
         const markerElement = this._correctMarker.current
-        if (markerElement && this.props.previousAnswerCorrect) {
+        if (markerElement && this.props.answerCorrect) {
             markerElement.classList.remove('Flash')
             // force re-triggering the CSS animation
             void markerElement.offsetWidth
@@ -31,7 +31,7 @@ export class Statistics extends React.Component<StatisticsProps, {}> {
                 </div>
                 <div className="Correct">
                     <div className="Label" ref={this._correctMarker} >✓</div>
-                    <div className="Value">{this.props.correct}</div>
+                    <div className="Value">{this.props.correctAnswers}</div>
                 </div>
             </div>
         )

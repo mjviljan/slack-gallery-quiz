@@ -2,6 +2,7 @@ import './index.less'
 
 import { QuizUser } from '../../logic/quiz/types'
 import { QuestionForm } from "../QuestionForm"
+import { WrongAnswerFeedback } from "../WrongAnswerFeedback"
 import { Statistics } from "../Statistics"
 import { QuizFinished } from "../QuizFinished"
 import shuffle from "shuffle.ts"
@@ -9,7 +10,14 @@ import * as React from "react"
 
 export interface QuizProps { users: Array<QuizUser> }
 
-export interface QuizState { remainingUsers: Array<QuizUser>, currentUser: QuizUser, correct: number, previousAnswerCorrect: boolean, quizEnded: boolean }
+export interface QuizState {
+    remainingUsers: Array<QuizUser>,
+    currentUser: QuizUser,
+    correctAnswers: number,
+    answerCorrect: boolean,
+    showCorrectAnswer: boolean,
+    quizEnded: boolean
+}
 
 export class Quiz extends React.Component<QuizProps, QuizState> {
 
@@ -17,43 +25,61 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         super(props)
         const shuffledUsers = shuffle(props.users)
         this.state = {
-            remainingUsers: shuffledUsers,
+            // remainingUsers: shuffledUsers,
+            remainingUsers: shuffledUsers.slice(0, 8),
             currentUser: shuffledUsers[0],
-            correct: 0,
-            previousAnswerCorrect: false,
+            correctAnswers: 0,
+            answerCorrect: false,
+            showCorrectAnswer: false,
             quizEnded: false
         }
     }
 
-    submitAnswer = (answer : string): void => {
+    isAnswerCorrect = (answer : string): boolean => {
         const lowerCaseAnswer = answer.toLowerCase()
         const correctAnswers = [
             this.state.currentUser.nickname.toLowerCase(),
             this.state.currentUser.firstName.toLowerCase()
         ]
 
-        if (correctAnswers.indexOf(lowerCaseAnswer) >= 0) {
-            console.log('Correct answer!')
+        return (correctAnswers.indexOf(lowerCaseAnswer) >= 0)
+    }
+
+    submitAnswer = (answer: string): void => {
+        if (this.isAnswerCorrect(answer)) {
             if (this.state.remainingUsers.length > 1) {
                 this.setState({
                     remainingUsers: this.state.remainingUsers.slice(1),
                     currentUser: this.state.remainingUsers[1],
-                    correct: this.state.correct + 1,
-                    previousAnswerCorrect: true
+                    correctAnswers: this.state.correctAnswers + 1,
+                    answerCorrect: true
                 })
             } else {
-                this.setState({quizEnded: true})
+                this.setState({ quizEnded: true })
             }
         } else {
-            console.log('Wrong answer :(')
-            const allUsers = this.state.remainingUsers.slice(1)
-            allUsers.push(this.state.currentUser)
             this.setState({
-                remainingUsers: allUsers,
-                currentUser: allUsers[0],
-                previousAnswerCorrect: false
+                answerCorrect: false,
+                showCorrectAnswer: true
             })
+            setTimeout(() => {
+                const allUsers = this.state.remainingUsers.slice(1)
+                allUsers.push(this.state.currentUser)
+                this.setState({
+                    remainingUsers: allUsers,
+                    currentUser: allUsers[0],
+                    showCorrectAnswer: false
+                })
+            }, 3000)
         }
+    }
+
+    getQuestionAreaComponentToShow() {
+        if (this.state.showCorrectAnswer) {
+            return <WrongAnswerFeedback user={this.state.currentUser} />
+        }
+
+        return <QuestionForm user={this.state.currentUser} answerHandler={this.submitAnswer} />
     }
 
     render() {
@@ -61,13 +87,13 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             return (
                 <div className="Quiz">
                     <div className="QuestionContainer">
-                        <QuestionForm user={this.state.currentUser} answerHandler={this.submitAnswer} />
+                        {this.getQuestionAreaComponentToShow()}
                     </div>
                     <div className="StatisticsContainer">
                         <Statistics
                             remaining={this.state.remainingUsers.length}
-                            correct={this.state.correct}
-                            previousAnswerCorrect={this.state.previousAnswerCorrect} />
+                            correctAnswers={this.state.correctAnswers}
+                            answerCorrect={this.state.answerCorrect} />
                     </div>
                 </div>
             )
