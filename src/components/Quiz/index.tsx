@@ -9,9 +9,10 @@ import * as React from "react"
 
 export interface QuizProps { users: Array<QuizUser> }
 
-export interface QuizState { remainingUsers: Array<QuizUser>, currentUser: QuizUser, correct: number, quizEnded: boolean }
+export interface QuizState { remainingUsers: Array<QuizUser>, currentUser: QuizUser, correct: number, previousAnswerCorrect: boolean, quizEnded: boolean }
 
 export class Quiz extends React.Component<QuizProps, QuizState> {
+
     constructor(props: QuizProps) {
         super(props)
         const shuffledUsers = shuffle(props.users)
@@ -19,6 +20,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             remainingUsers: shuffledUsers,
             currentUser: shuffledUsers[0],
             correct: 0,
+            previousAnswerCorrect: false,
             quizEnded: false
         }
     }
@@ -36,7 +38,8 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                 this.setState({
                     remainingUsers: this.state.remainingUsers.slice(1),
                     currentUser: this.state.remainingUsers[1],
-                    correct: this.state.correct + 1
+                    correct: this.state.correct + 1,
+                    previousAnswerCorrect: true
                 })
             } else {
                 this.setState({quizEnded: true})
@@ -47,7 +50,8 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             allUsers.push(this.state.currentUser)
             this.setState({
                 remainingUsers: allUsers,
-                currentUser: allUsers[0]
+                currentUser: allUsers[0],
+                previousAnswerCorrect: false
             })
         }
     }
@@ -60,7 +64,10 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                         <QuestionForm user={this.state.currentUser} answerHandler={this.submitAnswer} />
                     </div>
                     <div className="StatisticsContainer">
-                        <Statistics remaining={this.state.remainingUsers.length} correct={this.state.correct} />
+                        <Statistics
+                            remaining={this.state.remainingUsers.length}
+                            correct={this.state.correct}
+                            previousAnswerCorrect={this.state.previousAnswerCorrect} />
                     </div>
                 </div>
             )

@@ -1,12 +1,27 @@
 import './index.less'
 
-import { QuizUser } from '../../logic/quiz/types'
-import shuffle from "shuffle.ts"
 import * as React from "react"
 
-export interface StatisticsContainerProps { remaining: number, correct: number }
+export interface StatisticsProps { remaining: number, correct: number, previousAnswerCorrect: boolean }
 
-export class Statistics extends React.Component<StatisticsContainerProps, {}> {
+export class Statistics extends React.Component<StatisticsProps, {}> {
+    _correctMarker: React.RefObject<HTMLDivElement>
+
+    constructor(props: StatisticsProps) {
+        super(props)
+        this._correctMarker = React.createRef()
+    }
+
+    componentDidUpdate() {
+        const markerElement = this._correctMarker.current
+        if (markerElement && this.props.previousAnswerCorrect) {
+            markerElement.classList.remove('Flash')
+            // force re-triggering the CSS animation
+            void markerElement.offsetWidth
+            markerElement.classList.add('Flash')
+        }
+    }
+
     render() {
         return (
             <div className="Statistics">
@@ -15,7 +30,7 @@ export class Statistics extends React.Component<StatisticsContainerProps, {}> {
                     <div className="Value">{this.props.remaining}</div>
                 </div>
                 <div className="Correct">
-                    <div className="Label">✓</div>
+                    <div className="Label" ref={this._correctMarker} >✓</div>
                     <div className="Value">{this.props.correct}</div>
                 </div>
             </div>
