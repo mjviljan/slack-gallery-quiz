@@ -5,6 +5,43 @@
     height: 100%;
     position: relative;
 
+    > .RingOfStars {
+        color: white;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        animation: Rotate 0.8s steps(12) infinite;
+        font-size: 5vmin;
+        text-align: center;
+        text-shadow: 0 0 4vmin gold;
+
+        > .Star {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 40vmin;
+            right: 40vmin;
+        }
+        > .Star-2, .Star-4 {
+            font-size: 6vmin;
+            top: -1vmin
+        }
+        > .Star-3 {
+            font-size: 7vmin;
+            top: -2vmin
+        }
+        .generate-stars(12);
+
+        .generate-stars(@n, @i: 2) when (@i =< @n) {
+            > .Star-@{i} {
+                transform: rotate((@i - 1) * 30deg);
+            }
+            .generate-stars(@n, (@i + 1));
+        }
+    }
+
     > .Congratulations {
         position: absolute;
         top: 0;
@@ -13,7 +50,7 @@
         right: 0;
         height: fit-content;
         margin: auto;
-        font-size: 20vmin;
+        font-size: 18vmin;
         text-transform: uppercase;
         text-shadow: 0 0 0.02em cadetblue, 5px 5px 0.2em black;
     

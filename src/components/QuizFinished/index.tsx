@@ -20,6 +20,20 @@ export class QuizFinished extends React.Component<QuizFinishedProps, {}> {
     render() {
         return (
             <div className="QuizFinished">
+                <div className="RingOfStars">
+                    <div className="Star Star-1">★</div>
+                    <div className="Star Star-2">★</div>
+                    <div className="Star Star-3">★</div>
+                    <div className="Star Star-4">★</div>
+                    <div className="Star Star-5">★</div>
+                    <div className="Star Star-6">★</div>
+                    <div className="Star Star-7">★</div>
+                    <div className="Star Star-8">★</div>
+                    <div className="Star Star-9">★</div>
+                    <div className="Star Star-10">★</div>
+                    <div className="Star Star-11">★</div>
+                    <div className="Star Star-12">★</div>
+                </div>
                 <div className="Congratulations">
                     <div className="TextRow">
                         <div className="WiggleLetterCW">G</div>
