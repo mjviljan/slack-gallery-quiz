@@ -4,7 +4,7 @@
   "description": "A quiz using Slack account images and asking the user to recognize the people",
   "main": "src/index.ts",
   "scripts": {
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html --no-cache",
     "deploy": "yarn build && firebase deploy",
     "start": "parcel src/index.html",
     "test:watch": "jest --watchAll",

@@ -1,0 +1,35 @@
+@import "../../styles/defaults";
+
+.Filters {
+    display: flex;
+    flex-direction: column;
+    font-size: 4vmin;
+
+    > button {
+        margin: 0 0 1vmin 0;
+        background: none;
+        color: inherit;
+        font-size: inherit;
+        border: solid 2px @main-text-color;
+        border-radius: 2vmin;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+
+        &.active {
+            background-color: @main-text-color;
+            color: @main-background-color;
+        }
+
+        &:disabled {
+            opacity: .5;
+        }
+        &:hover:not([disabled]) {
+            color: white;
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+}

@@ -1,16 +1,19 @@
-import './index.less'
-
-import { QuizUser } from '../../logic/quiz/types'
-import { QuestionForm } from "../QuestionForm"
-import { WrongAnswerFeedback } from "../WrongAnswerFeedback"
-import { Statistics } from "../Statistics"
-import { QuizFinished } from "../QuizFinished"
 import shuffle from "shuffle.ts"
 import * as React from "react"
+
+import "./index.less"
+
+import { FilterSelection } from "../../logic/quiz/types"
+import { QuizUser } from "../../logic/quiz/types"
+import { QuestionForm } from "../QuestionForm"
+import { WrongAnswerFeedback } from "../WrongAnswerFeedback"
+import { Controls } from "../Controls"
+import { QuizFinished } from "../QuizFinished"
 
 export interface QuizProps { users: Array<QuizUser> }
 
 export interface QuizState {
+    selectedFilter: FilterSelection,
     remainingUsers: Array<QuizUser>,
     currentUser: QuizUser,
     correctAnswers: number,
@@ -23,11 +26,22 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
 
     constructor(props: QuizProps) {
         super(props)
-        const shuffledUsers = shuffle(props.users)
-        this.state = {
-            // remainingUsers: shuffledUsers,
-            remainingUsers: shuffledUsers.slice(0, 8),
-            currentUser: shuffledUsers[0],
+        this.state = this.getQuizStartState(FilterSelection.ALL)
+    }
+    
+    getQuizStartState = (filterSelection : FilterSelection) : QuizState => {
+        const shuffledUsers = shuffle(this.props.users)
+
+        let includedUsers: Array<QuizUser>
+        if (filterSelection === FilterSelection.RND10) {
+            includedUsers = shuffledUsers.slice(0, 10)
+        } else {
+            includedUsers = shuffledUsers
+        }
+        return {
+            selectedFilter: filterSelection,
+            remainingUsers: includedUsers,
+            currentUser: includedUsers[0],
             correctAnswers: 0,
             answerCorrect: false,
             showCorrectAnswer: false,
@@ -35,7 +49,11 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         }
     }
 
-    isAnswerCorrect = (answer : string): boolean => {
+    onFilterSelected = (selection: FilterSelection) => {
+        this.setState(this.getQuizStartState(selection))
+    }
+
+    isAnswerCorrect = (answer: string): boolean => {
         const lowerCaseAnswer = answer.toLowerCase()
         const correctAnswers = [
             this.state.currentUser.nickname.toLowerCase(),
@@ -45,7 +63,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         return (correctAnswers.indexOf(lowerCaseAnswer) >= 0)
     }
 
-    submitAnswer = (answer: string): void => {
+    onAnswerSubmit = (answer: string): void => {
         if (this.isAnswerCorrect(answer)) {
             if (this.state.remainingUsers.length > 1) {
                 this.setState({
@@ -79,7 +97,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             return <WrongAnswerFeedback user={this.state.currentUser} />
         }
 
-        return <QuestionForm user={this.state.currentUser} answerHandler={this.submitAnswer} />
+        return <QuestionForm user={this.state.currentUser} answerHandler={this.onAnswerSubmit} />
     }
 
     render() {
@@ -89,11 +107,13 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                     <div className="QuestionContainer">
                         {this.getQuestionAreaComponentToShow()}
                     </div>
-                    <div className="StatisticsContainer">
-                        <Statistics
+                    <div className="ControlsContainer">
+                        <Controls
                             remaining={this.state.remainingUsers.length}
                             correctAnswers={this.state.correctAnswers}
-                            answerCorrect={this.state.answerCorrect} />
+                            answerCorrect={this.state.answerCorrect}
+                            selectedFilter={this.state.selectedFilter}
+                            filterSelectionHandler={this.onFilterSelected} />
                     </div>
                 </div>
             )

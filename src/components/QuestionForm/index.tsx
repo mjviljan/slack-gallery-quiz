@@ -25,6 +25,21 @@ export class QuestionForm extends React.Component<QuestionFormProps, {guess : st
         this.setState({guess: ""})
     }
 
+    setFocusToAnswerField = () => {
+        const answerField = this._answerField.current
+        if (answerField) {
+            answerField.focus()
+        }
+    }    
+
+    componentDidMount() {
+        this.setFocusToAnswerField()
+    }
+
+    componentDidUpdate() {
+        this.setFocusToAnswerField()
+    }
+
     render() {
         return (
             <div className="QuestionForm">
@@ -35,12 +50,5 @@ export class QuestionForm extends React.Component<QuestionFormProps, {guess : st
                 </form>
             </div>
         )
-    }
-
-    componentDidMount() {
-        const answerField = this._answerField.current
-        if (answerField) {
-            answerField.focus()
-        }
     }
 }
