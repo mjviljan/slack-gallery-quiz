@@ -1,5 +1,5 @@
-import {QuizUser} from "../src/logic/quiz/types"
-import {activeNonBotMainUsersOnly} from "../src/logic/users/userFilter"
+import { QuizUser } from "../src/types"
+import { activeNonBotMainUsersOnly } from "../src/userFilter"
 
 const fakeUsers = require('./test_data.json')
 

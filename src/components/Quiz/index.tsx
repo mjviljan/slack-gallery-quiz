@@ -3,8 +3,7 @@ import * as React from "react"
 
 import "./index.less"
 
-import { FilterSelection } from "../../logic/quiz/types"
-import { QuizUser } from "../../logic/quiz/types"
+import { FilterSelection, QuizUser } from "../../types/types"
 import { QuestionForm } from "../QuestionForm"
 import { WrongAnswerFeedback } from "../WrongAnswerFeedback"
 import { Controls } from "../Controls"

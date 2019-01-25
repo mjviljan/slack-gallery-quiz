@@ -7,7 +7,6 @@
     "build": "parcel build src/index.html --no-cache",
     "deploy": "yarn build && firebase deploy",
     "start": "parcel src/index.html",
-    "test:watch": "jest --watchAll",
     "tsc:watch": "tsc -w"
   },
   "author": "mjviljan",
@@ -24,27 +23,12 @@
     "shuffle.ts": "^1.0.1"
   },
   "devDependencies": {
+    "@google-cloud/functions-emulator": "^1.0.0-beta.5",
     "@types/jest": "^23.3.9",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
     "firebase": "^5.7.2",
     "firebase-tools": "^6.2.2",
-    "jest": "^23.6.0",
     "less": "^3.9.0",
     "parcel-bundler": "^1.11.0",
-    "ts-jest": "^23.10.4",
     "typescript": "^3.1.6"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "testMatch": [
-      "<rootDir>/test/**/*.test.ts"
-    ]
   }
 }

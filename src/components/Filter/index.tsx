@@ -1,5 +1,5 @@
 import "./index.less"
-import { FilterSelection } from "../../logic/quiz/types"
+import { FilterSelection } from "../../types/types"
 
 import * as React from "react"
 
