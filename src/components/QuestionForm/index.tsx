@@ -1,6 +1,6 @@
 import "./index.less"
 
-import { QuizUser } from "../../logic/quiz/types"
+import { QuizUser } from "../../types/types"
 import * as React from "react"
 
 export interface QuestionFormProps { user: QuizUser, answerHandler: (answer : string) => void }
