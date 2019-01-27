@@ -4,7 +4,7 @@ import { FilterSelection } from "../../types/types"
 import * as React from "react"
 
 export interface FilterProps {
-    failedGuessUsers: Array<string>,
+    showFailedGuessesOption: boolean,
     selectedFilter: FilterSelection,
     filterSelectionHandler: (selection: FilterSelection) => void
 }
@@ -29,7 +29,7 @@ export class Filter extends React.Component<FilterProps, {}> {
                     value={FilterSelection.RND10}>Random 10</button>
                 <button
                     className={this.props.selectedFilter === FilterSelection.FAILURES ? "active" : ""}
-                    disabled={this.props.failedGuessUsers.length === 0}
+                    disabled={!this.props.showFailedGuessesOption}
                     type="button"
                     onClick={this.buttonClick}
                     value={FilterSelection.FAILURES}>Latest failed</button>

@@ -19,6 +19,7 @@ export interface QuizState {
     answerCorrect: boolean,
     showCorrectAnswer: boolean,
     failedGuessUsers: Array<string>,
+    previousFailures: Array<string>,
     quizEnded: boolean
 }
 
@@ -31,12 +32,18 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
 
     getQuizStartState = (filterSelection: FilterSelection): QuizState => {
         const shuffledUsers = shuffle(this.props.users)
+        const storedFailures = window.localStorage.getItem("failedGuesses")
+        const previousFailures : string[] = storedFailures ? JSON.parse(storedFailures) : []
 
         let includedUsers: Array<QuizUser>
         if (filterSelection === FilterSelection.RND10) {
             includedUsers = shuffledUsers.slice(0, 10)
         } else if (filterSelection === FilterSelection.FAILURES) {
-            includedUsers = shuffledUsers.filter(u => this.state.failedGuessUsers.indexOf(u.id) >= 0)
+            if (previousFailures.length > 0) {
+                includedUsers = shuffledUsers.filter(u => previousFailures.indexOf(u.id) >= 0)
+            } else {
+                includedUsers = shuffledUsers.filter(u => this.state.failedGuessUsers.indexOf(u.id) >= 0)
+            }
         } else {
             includedUsers = shuffledUsers
         }
@@ -48,6 +55,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             answerCorrect: false,
             showCorrectAnswer: false,
             failedGuessUsers: [],
+            previousFailures: previousFailures,
             quizEnded: false
         }
     }
@@ -125,13 +133,14 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                             remaining={this.state.remainingUsers.length}
                             correctAnswers={this.state.correctAnswers}
                             answerCorrect={this.state.answerCorrect}
-                            failedGuessUsers={this.state.failedGuessUsers}
+                            showFailedGuessesOption={this.state.failedGuessUsers.length > 0 || this.state.previousFailures.length > 0}
                             selectedFilter={this.state.selectedFilter}
                             filterSelectionHandler={this.onFilterSelected} />
                     </div>
                 </div>
             )
         } else {
+            window.localStorage.setItem("failedGuesses", JSON.stringify(this.state.failedGuessUsers))
             return (
                 <div className="Finished">
                     <QuizFinished
