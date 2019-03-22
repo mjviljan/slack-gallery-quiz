@@ -1,11 +1,11 @@
-import "./index.less"
-import { FilterSelection } from "../../types/types"
+import './index.less'
+import { FilterSelection } from '../../types/types'
 
-import * as React from "react"
+import * as React from 'react'
 
 export interface FilterProps {
-    showFailedGuessesOption: boolean,
-    selectedFilter: FilterSelection,
+    showFailedGuessesOption: boolean
+    selectedFilter: FilterSelection
     filterSelectionHandler: (selection: FilterSelection) => void
 }
 
@@ -18,21 +18,30 @@ export class Filter extends React.Component<FilterProps, {}> {
         return (
             <div className="Filters">
                 <button
-                    className={this.props.selectedFilter === FilterSelection.ALL ? "active" : ""}
+                    className={this.props.selectedFilter === FilterSelection.ALL ? 'active' : ''}
                     type="button"
                     onClick={this.buttonClick}
-                    value={FilterSelection.ALL}>All</button>
+                    value={FilterSelection.ALL}
+                >
+                    All
+                </button>
                 <button
-                    className={this.props.selectedFilter === FilterSelection.RND10 ? "active" : ""}
+                    className={this.props.selectedFilter === FilterSelection.RND10 ? 'active' : ''}
                     type="button"
                     onClick={this.buttonClick}
-                    value={FilterSelection.RND10}>Random 10</button>
+                    value={FilterSelection.RND10}
+                >
+                    Random 10
+                </button>
                 <button
-                    className={this.props.selectedFilter === FilterSelection.FAILURES ? "active" : ""}
+                    className={this.props.selectedFilter === FilterSelection.FAILURES ? 'active' : ''}
                     disabled={!this.props.showFailedGuessesOption}
                     type="button"
                     onClick={this.buttonClick}
-                    value={FilterSelection.FAILURES}>Latest failed</button>
+                    value={FilterSelection.FAILURES}
+                >
+                    Latest failed
+                </button>
             </div>
         )
     }

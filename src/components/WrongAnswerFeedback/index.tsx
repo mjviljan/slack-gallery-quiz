@@ -1,12 +1,13 @@
-import "./index.less"
+import './index.less'
 
-import { QuizUser } from "../../types/types"
-import * as React from "react"
+import { QuizUser } from '../../types/types'
+import * as React from 'react'
 
-export interface AnswerFeedbackProps { user: QuizUser }
+export interface AnswerFeedbackProps {
+    user: QuizUser
+}
 
 export class WrongAnswerFeedback extends React.Component<AnswerFeedbackProps, {}> {
-
     render() {
         let correctAnswer = this.props.user.firstName
         if (this.props.user.firstName.toLowerCase() !== this.props.user.nickname.toLowerCase()) {

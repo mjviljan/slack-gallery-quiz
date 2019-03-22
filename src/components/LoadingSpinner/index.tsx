@@ -1,15 +1,15 @@
-import "./index.less"
+import './index.less'
 
-import * as React from "react";
+import * as React from 'react'
 
 export class LoadingSpinner extends React.Component<{}, {}> {
     render() {
         return (
             <div className="LoadingSpinner">
                 <div className="Circle">
-                    <div className="Hub"></div>
-                    <div className="ShortArm"></div>
-                    <div className="LongArm"></div>
+                    <div className="Hub" />
+                    <div className="ShortArm" />
+                    <div className="LongArm" />
                 </div>
                 <div className="Text">
                     <p>Loading</p>

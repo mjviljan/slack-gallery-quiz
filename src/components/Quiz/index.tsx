@@ -1,30 +1,31 @@
-import shuffle from "shuffle.ts"
-import * as React from "react"
+import shuffle from 'shuffle.ts'
+import * as React from 'react'
 
-import "./index.less"
+import './index.less'
 
-import { FilterSelection, QuizUser } from "../../types/types"
-import { QuestionForm } from "../QuestionForm"
-import { WrongAnswerFeedback } from "../WrongAnswerFeedback"
-import { Controls } from "../Controls"
-import { QuizFinished } from "../QuizFinished"
+import { FilterSelection, QuizUser } from '../../types/types'
+import { QuestionForm } from '../QuestionForm'
+import { WrongAnswerFeedback } from '../WrongAnswerFeedback'
+import { Controls } from '../Controls'
+import { QuizFinished } from '../QuizFinished'
 
-export interface QuizProps { users: Array<QuizUser> }
+export interface QuizProps {
+    users: Array<QuizUser>
+}
 
 export interface QuizState {
-    selectedFilter: FilterSelection,
-    remainingUsers: Array<QuizUser>,
-    currentUser: QuizUser,
-    correctAnswers: number,
-    answerCorrect: boolean,
-    showCorrectAnswer: boolean,
-    failedGuessUsers: Array<string>,
-    previousFailures: Array<string>,
+    selectedFilter: FilterSelection
+    remainingUsers: Array<QuizUser>
+    currentUser: QuizUser
+    correctAnswers: number
+    answerCorrect: boolean
+    showCorrectAnswer: boolean
+    failedGuessUsers: Array<string>
+    previousFailures: Array<string>
     quizEnded: boolean
 }
 
 export class Quiz extends React.Component<QuizProps, QuizState> {
-
     constructor(props: QuizProps) {
         super(props)
         this.state = this.getQuizStartState(FilterSelection.ALL)
@@ -32,8 +33,8 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
 
     getQuizStartState = (filterSelection: FilterSelection): QuizState => {
         const shuffledUsers = shuffle(this.props.users)
-        const storedFailures = window.localStorage.getItem("failedGuesses")
-        const previousFailures : string[] = storedFailures ? JSON.parse(storedFailures) : []
+        const storedFailures = window.localStorage.getItem('failedGuesses')
+        const previousFailures: string[] = storedFailures ? JSON.parse(storedFailures) : []
 
         let includedUsers: Array<QuizUser>
         if (filterSelection === FilterSelection.RND10) {
@@ -56,7 +57,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             showCorrectAnswer: false,
             failedGuessUsers: [],
             previousFailures: previousFailures,
-            quizEnded: false
+            quizEnded: false,
         }
     }
 
@@ -72,10 +73,10 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         const lowerCaseAnswer = answer.toLowerCase()
         const correctAnswers = [
             this.state.currentUser.nickname.toLowerCase(),
-            this.state.currentUser.firstName.toLowerCase()
+            this.state.currentUser.firstName.toLowerCase(),
         ]
 
-        return (correctAnswers.indexOf(lowerCaseAnswer) >= 0)
+        return correctAnswers.indexOf(lowerCaseAnswer) >= 0
     }
 
     onAnswerSubmit = (answer: string): void => {
@@ -85,7 +86,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                     remainingUsers: this.state.remainingUsers.slice(1),
                     currentUser: this.state.remainingUsers[1],
                     correctAnswers: this.state.correctAnswers + 1,
-                    answerCorrect: true
+                    answerCorrect: true,
                 })
             } else {
                 this.setState({ quizEnded: true })
@@ -99,7 +100,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             this.setState({
                 answerCorrect: false,
                 showCorrectAnswer: true,
-                failedGuessUsers: failedGuesses
+                failedGuessUsers: failedGuesses,
             })
             setTimeout(() => {
                 const allUsers = this.state.remainingUsers.slice(1)
@@ -107,7 +108,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                 this.setState({
                     remainingUsers: allUsers,
                     currentUser: allUsers[0],
-                    showCorrectAnswer: false
+                    showCorrectAnswer: false,
                 })
             }, 3000)
         }
@@ -125,22 +126,23 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         if (!this.state.quizEnded) {
             return (
                 <div className="Quiz">
-                    <div className="QuestionContainer">
-                        {this.getQuestionAreaComponentToShow()}
-                    </div>
+                    <div className="QuestionContainer">{this.getQuestionAreaComponentToShow()}</div>
                     <div className="ControlsContainer">
                         <Controls
                             remaining={this.state.remainingUsers.length}
                             correctAnswers={this.state.correctAnswers}
                             answerCorrect={this.state.answerCorrect}
-                            showFailedGuessesOption={this.state.failedGuessUsers.length > 0 || this.state.previousFailures.length > 0}
+                            showFailedGuessesOption={
+                                this.state.failedGuessUsers.length > 0 || this.state.previousFailures.length > 0
+                            }
                             selectedFilter={this.state.selectedFilter}
-                            filterSelectionHandler={this.onFilterSelected} />
+                            filterSelectionHandler={this.onFilterSelected}
+                        />
                     </div>
                 </div>
             )
         } else {
-            window.localStorage.setItem("failedGuesses", JSON.stringify(this.state.failedGuessUsers))
+            window.localStorage.setItem('failedGuesses', JSON.stringify(this.state.failedGuessUsers))
             return (
                 <div className="Finished">
                     <QuizFinished

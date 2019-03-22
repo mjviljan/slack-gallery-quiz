@@ -1,4 +1,4 @@
-@import "../../styles/defaults.less";
+@import '../../styles/defaults.less';
 
 .QuizFinished {
     width: 100%;
@@ -25,13 +25,14 @@
             left: 40vmin;
             right: 40vmin;
         }
-        > .Star-2, .Star-4 {
+        > .Star-2,
+        .Star-4 {
             font-size: 6vmin;
-            top: -1vmin
+            top: -1vmin;
         }
         > .Star-3 {
             font-size: 7vmin;
-            top: -2vmin
+            top: -2vmin;
         }
         .generate-stars(12);
 
@@ -54,18 +55,18 @@
         font-size: 18vmin;
         text-transform: uppercase;
         text-shadow: 0 0 0.02em cadetblue, 5px 5px 0.2em black;
-    
+
         > .TextRow {
             display: flex;
             flex-direction: row;
             justify-content: center;
 
             > .WiggleLetterCW {
-                animation: Wiggle-CW .3s linear infinite;
+                animation: Wiggle-CW 0.3s linear infinite;
             }
-            
+
             > .WiggleLetterCCW {
-                animation: Wiggle-CCW .3s linear infinite;
+                animation: Wiggle-CCW 0.3s linear infinite;
             }
         }
     }
@@ -81,7 +82,7 @@
         > a {
             color: @main-text-color;
             text-decoration: none;
-            
+
             &:hover {
                 text-decoration: underline;
             }

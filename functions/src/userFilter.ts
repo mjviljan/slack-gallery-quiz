@@ -1,13 +1,15 @@
-import { QuizUser, UserListFetchResult, UserListMember } from "./types"
+import { QuizUser, UserListFetchResult, UserListMember } from './types'
 
 function getBiggestImageUrl(user: UserListMember): string {
-    return user.profile.image_1024
-        || user.profile.image_512
-        || user.profile.image_192
-        || user.profile.image_72
-        || user.profile.image_48
-        || user.profile.image_32
-        || user.profile.image_24
+    return (
+        user.profile.image_1024 ||
+        user.profile.image_512 ||
+        user.profile.image_192 ||
+        user.profile.image_72 ||
+        user.profile.image_48 ||
+        user.profile.image_32 ||
+        user.profile.image_24
+    )
 }
 
 export function activeNonBotMainUsersOnly(userList: UserListFetchResult): Array<QuizUser> {
@@ -20,6 +22,6 @@ export function activeNonBotMainUsersOnly(userList: UserListFetchResult): Array<
             id: u.id,
             imageUrl: getBiggestImageUrl(u),
             nickname: u.profile.display_name,
-            firstName: u.profile.first_name
+            firstName: u.profile.first_name,
         }))
 }

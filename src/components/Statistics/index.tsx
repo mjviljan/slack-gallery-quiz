@@ -1,8 +1,12 @@
-import "./index.less"
+import './index.less'
 
-import * as React from "react"
+import * as React from 'react'
 
-export interface StatisticsProps { remaining: number, correctAnswers: number, answerCorrect: boolean }
+export interface StatisticsProps {
+    remaining: number
+    correctAnswers: number
+    answerCorrect: boolean
+}
 
 export class Statistics extends React.Component<StatisticsProps, {}> {
     _correctMarker: React.RefObject<HTMLDivElement>
@@ -30,7 +34,9 @@ export class Statistics extends React.Component<StatisticsProps, {}> {
                     <div className="Value">{this.props.remaining}</div>
                 </div>
                 <div className="Correct">
-                    <div className="Label" ref={this._correctMarker} >✓</div>
+                    <div className="Label" ref={this._correctMarker}>
+                        ✓
+                    </div>
                     <div className="Value">{this.props.correctAnswers}</div>
                 </div>
             </div>
