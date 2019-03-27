@@ -1,4 +1,4 @@
-import {apps, initializeApp} from "firebase/app"
+import { apps, initializeApp } from 'firebase/app'
 
 if (!apps.length) {
     initializeApp({

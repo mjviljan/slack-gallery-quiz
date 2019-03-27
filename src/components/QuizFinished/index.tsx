@@ -1,15 +1,14 @@
-import "./index.less"
+import './index.less'
 
-import { FilterSelection } from "../../types/types"
-import * as React from "react"
+import { FilterSelection } from '../../types/types'
+import * as React from 'react'
 
 export interface QuizFinishedProps {
     restartFunction: (() => void) | null
 }
 
 export class QuizFinished extends React.Component<QuizFinishedProps, {}> {
-
-    onRestartClicked = (clickEvent : React.MouseEvent) => {
+    onRestartClicked = (clickEvent: React.MouseEvent) => {
         clickEvent.preventDefault()
 
         if (this.props.restartFunction) {
@@ -48,8 +47,10 @@ export class QuizFinished extends React.Component<QuizFinishedProps, {}> {
                         <div className="WiggleLetterCCW">!</div>
                     </div>
                 </div>
-                <div className={this.props.restartFunction ? "RestartLink" : "Hidden"}>
-                    <a href="#" onClick={this.onRestartClicked}>Restart quiz with failed guesses only ↺</a>
+                <div className={this.props.restartFunction ? 'RestartLink' : 'Hidden'}>
+                    <a href="#" onClick={this.onRestartClicked}>
+                        Restart quiz with failed guesses only ↺
+                    </a>
                 </div>
             </div>
         )
