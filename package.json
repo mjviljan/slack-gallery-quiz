@@ -6,7 +6,8 @@
   "scripts": {
     "build": "parcel build src/index.html --no-cache",
     "deploy": "yarn build && firebase deploy",
-    "start": "parcel src/index.html",
+    "start": "yarn firebase serve --only functions,hosting",
+    "setup": "yarn install --ignore-engines && cd functions && yarn install && yarn build && cd ..",
     "tsc:watch": "tsc -w"
   },
   "author": "mjviljan",
