@@ -32,21 +32,28 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
     }
 
     getQuizStartState = (filterSelection: FilterSelection): QuizState => {
-        const shuffledUsers = shuffle(this.props.users)
         const storedFailures = window.localStorage.getItem('failedGuesses')
         const previousFailures: string[] = storedFailures ? JSON.parse(storedFailures) : []
 
         let includedUsers: Array<QuizUser>
-        if (filterSelection === FilterSelection.RND10) {
-            includedUsers = shuffledUsers.slice(0, 10)
-        } else if (filterSelection === FilterSelection.FAILURES) {
-            if (previousFailures.length > 0) {
-                includedUsers = shuffledUsers.filter(u => previousFailures.indexOf(u.id) >= 0)
-            } else {
-                includedUsers = shuffledUsers.filter(u => this.state.failedGuessUsers.indexOf(u.id) >= 0)
-            }
+        if (filterSelection === FilterSelection.NEWEST10 || filterSelection === FilterSelection.NEWEST25) {
+            const allUsers = [...this.props.users]
+            const groupSize = (filterSelection === FilterSelection.NEWEST10 ? 10 : 25)
+            const newestBatch = allUsers.splice(allUsers.length - groupSize)
+            includedUsers = shuffle(newestBatch)
         } else {
-            includedUsers = shuffledUsers
+            const shuffledUsers = shuffle(this.props.users)
+            if (filterSelection === FilterSelection.RND10) {
+                includedUsers = shuffledUsers.slice(0, 10)
+            } else if (filterSelection === FilterSelection.FAILURES) {
+                if (previousFailures.length > 0) {
+                    includedUsers = shuffledUsers.filter(u => previousFailures.indexOf(u.id) >= 0)
+                } else {
+                    includedUsers = shuffledUsers.filter(u => this.state.failedGuessUsers.indexOf(u.id) >= 0)
+                }
+            } else {
+                includedUsers = shuffledUsers
+            }
         }
         return {
             selectedFilter: filterSelection,
@@ -116,10 +123,10 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
 
     getQuestionAreaComponentToShow() {
         if (this.state.showCorrectAnswer) {
-            return <WrongAnswerFeedback user={this.state.currentUser} />
+            return <WrongAnswerFeedback user={this.state.currentUser}/>
         }
 
-        return <QuestionForm user={this.state.currentUser} answerHandler={this.onAnswerSubmit} />
+        return <QuestionForm user={this.state.currentUser} answerHandler={this.onAnswerSubmit}/>
     }
 
     render() {

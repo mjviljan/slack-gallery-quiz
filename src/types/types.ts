@@ -7,6 +7,8 @@ export type QuizUser = {
 
 export enum FilterSelection {
     ALL = 'ALL',
+    NEWEST10 = 'NEWEST10',
+    NEWEST25 = 'NEWEST25',
     RND10 = 'RND10',
     FAILURES = 'FAILURES',
 }

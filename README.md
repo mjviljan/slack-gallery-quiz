@@ -79,7 +79,6 @@ yarn deploy
 
 ### Improvement ideas
 
-- Make it possible to choose only the latest 10 (or 25) members added to Slack to be shown to the user.
 - Consider offering answer options (e.g. 4 names) instead of requiring the user to enter the name manually.
 - Consider adding a leaderboard – or some other stats.
 - Add a lazy loading indicator when loading the next image. 

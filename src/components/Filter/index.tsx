@@ -26,6 +26,22 @@ export class Filter extends React.Component<FilterProps, {}> {
                     All
                 </button>
                 <button
+                    className={this.props.selectedFilter === FilterSelection.NEWEST10 ? 'active' : ''}
+                    type="button"
+                    onClick={this.buttonClick}
+                    value={FilterSelection.NEWEST10}
+                >
+                    Newest 10
+                </button>
+                <button
+                    className={this.props.selectedFilter === FilterSelection.NEWEST25 ? 'active' : ''}
+                    type="button"
+                    onClick={this.buttonClick}
+                    value={FilterSelection.NEWEST25}
+                >
+                    Newest 25
+                </button>
+                <button
                     className={this.props.selectedFilter === FilterSelection.RND10 ? 'active' : ''}
                     type="button"
                     onClick={this.buttonClick}
