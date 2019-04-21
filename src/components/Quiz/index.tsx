@@ -17,6 +17,7 @@ export interface QuizState {
     selectedFilter: FilterSelection
     remainingUsers: Array<QuizUser>
     currentUser: QuizUser
+    nextUserImgUrl: string
     correctAnswers: number
     answerCorrect: boolean
     showCorrectAnswer: boolean
@@ -59,6 +60,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             selectedFilter: filterSelection,
             remainingUsers: includedUsers,
             currentUser: includedUsers[0],
+            nextUserImgUrl: includedUsers.length > 1 ? includedUsers[1].imageUrl : '',
             correctAnswers: 0,
             answerCorrect: false,
             showCorrectAnswer: false,
@@ -87,6 +89,9 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
     }
 
     onAnswerSubmit = (answer: string): void => {
+        this.setState({
+            nextUserImgUrl: this.state.remainingUsers.length > 2 ? this.state.remainingUsers[2].imageUrl : '',
+        })
         if (this.isAnswerCorrect(answer)) {
             if (this.state.remainingUsers.length > 1) {
                 this.setState({
@@ -129,10 +134,20 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         return <QuestionForm user={this.state.currentUser} answerHandler={this.onAnswerSubmit}/>
     }
 
+    getNextImagePreloadComponent() {
+        if (this.state.nextUserImgUrl) {
+            return <link rel="prefetch" href={this.state.nextUserImgUrl}/>
+        }
+
+        // just return a "no-op" component
+        return <a />
+    }
+
     render() {
         if (!this.state.quizEnded) {
             return (
                 <div className="Quiz">
+                    {this.getNextImagePreloadComponent()}
                     <div className="QuestionContainer">{this.getQuestionAreaComponentToShow()}</div>
                     <div className="ControlsContainer">
                         <Controls
