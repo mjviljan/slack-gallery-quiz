@@ -81,4 +81,3 @@ yarn deploy
 
 - Consider offering answer options (e.g. 4 names) instead of requiring the user to enter the name manually.
 - Consider adding a leaderboard – or some other stats.
-- Add a lazy loading indicator when loading the next image. 
