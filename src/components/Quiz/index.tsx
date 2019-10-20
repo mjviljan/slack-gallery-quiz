@@ -19,6 +19,7 @@ export interface QuizState {
     currentUser: QuizUser
     nextUserImgUrl: string
     correctAnswers: number
+    userImageLoaded: boolean
     answerCorrect: boolean
     showCorrectAnswer: boolean
     failedGuessUsers: Array<string>
@@ -62,6 +63,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             currentUser: includedUsers[0],
             nextUserImgUrl: includedUsers.length > 1 ? includedUsers[1].imageUrl : '',
             correctAnswers: 0,
+            userImageLoaded: false,
             answerCorrect: false,
             showCorrectAnswer: false,
             failedGuessUsers: [],
@@ -72,6 +74,10 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
 
     onFilterSelected = (selection: FilterSelection) => {
         this.setState(this.getQuizStartState(selection))
+    }
+
+    onUserImageLoaded = () => {
+        this.setState({ userImageLoaded: true })
     }
 
     restartWithFailedGuessed = () => {
@@ -91,6 +97,7 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
     onAnswerSubmit = (answer: string): void => {
         this.setState({
             nextUserImgUrl: this.state.remainingUsers.length > 2 ? this.state.remainingUsers[2].imageUrl : '',
+            userImageLoaded: false
         })
         if (this.isAnswerCorrect(answer)) {
             if (this.state.remainingUsers.length > 1) {
@@ -131,7 +138,11 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             return <WrongAnswerFeedback user={this.state.currentUser}/>
         }
 
-        return <QuestionForm user={this.state.currentUser} answerHandler={this.onAnswerSubmit}/>
+        return <QuestionForm
+            user={this.state.currentUser}
+            answerHandler={this.onAnswerSubmit}
+            userImageLoaded={this.state.userImageLoaded}
+            imageOnloadHandler={this.onUserImageLoaded}/>
     }
 
     getNextImagePreloadComponent() {

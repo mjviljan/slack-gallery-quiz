@@ -2,10 +2,13 @@ import './index.less'
 
 import { QuizUser } from '../../types/types'
 import * as React from 'react'
+import { ImageLoader } from '../ImageLoader'
 
 export interface QuestionFormProps {
     user: QuizUser
     answerHandler: (answer: string) => void
+    userImageLoaded: boolean
+    imageOnloadHandler: () => void
 }
 
 export class QuestionForm extends React.Component<QuestionFormProps, { guess: string }> {
@@ -44,19 +47,24 @@ export class QuestionForm extends React.Component<QuestionFormProps, { guess: st
     }
 
     render() {
-        return (
-            <div className="QuestionForm">
-                <img src={this.props.user.imageUrl} />
-                <div className="Question">Who is this?</div>
-                <form onSubmit={this.submitAnswer}>
-                    <input
-                        ref={this._answerField}
-                        type="text"
-                        value={this.state.guess}
-                        onChange={this.handleGuessChange}
-                    />
-                </form>
-            </div>
-        )
+        if (this.props.userImageLoaded) {
+            return (
+                <div className="QuestionForm">
+                    <img src={this.props.user.imageUrl}/>
+                    <div className="Question">Who is this?</div>
+                    <form onSubmit={this.submitAnswer}>
+                        <input
+                            ref={this._answerField}
+                            type="text"
+                            value={this.state.guess}
+                            onChange={this.handleGuessChange}
+                        />
+                    </form>
+                </div>
+            )
+        } else {
+            return <ImageLoader userImageUrl={this.props.user.imageUrl}
+                                imageOnloadHandler={this.props.imageOnloadHandler}/>
+        }
     }
 }

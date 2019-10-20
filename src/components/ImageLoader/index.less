@@ -1,12 +1,12 @@
-.LoadingSpinner {
+.ImageLoader {
     @clock-color: cadetblue;
 
-    width: 50vmin;
-    height: 50vmin;
-    margin: auto;
+    width: 25vmin;
+    height: 25vmin;
+    margin: 12vmin auto 0;
 
     > .Circle {
-        @border-width: 20px;
+        @border-width: 5px;
 
         width: 100%;
         height: 100%;
@@ -17,7 +17,7 @@
         position: relative;
 
         .Arm {
-            @arm-width: 6%;
+            @arm-width: 4%;
 
             background-color: @clock-color;
             position: absolute;
@@ -55,8 +55,8 @@
     > .Text {
         width: 100vw;
         position: absolute;
-        left: 0;
-        top: calc(50% - 11vmin);
+        left: -9.5vmin;
+        top: 50%;
         text-align: center;
 
         > p {
@@ -64,11 +64,16 @@
             margin: 0;
             padding: 0;
             z-index: 10;
-            font-size: 18vmin;
+            font-size: 8vmin;
             text-transform: uppercase;
             color: white;
             text-shadow: 0 0 0.02em white, 0 0 0.2em @clock-color, 0 0 1em @clock-color;
             animation: Pulsate 2s ease-in-out infinite;
         }
+    }
+
+    .ImageBeingLoaded {
+        width: 0px;
+        height: 0px;
     }
 }
