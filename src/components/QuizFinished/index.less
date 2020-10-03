@@ -7,7 +7,7 @@
     overflow: hidden;
 
     > .RingOfStars {
-        color: white;
+        color: #fff5;
         position: absolute;
         top: 5%;
         bottom: 5%;
@@ -16,7 +16,6 @@
         animation: Rotate 0.8s steps(12) infinite;
         font-size: 5vmin;
         text-align: center;
-        text-shadow: 0 0 4vmin gold;
 
         > .Star {
             position: absolute;
@@ -27,12 +26,12 @@
         }
         > .Star-2,
         .Star-4 {
-            font-size: 6vmin;
-            top: -1vmin;
+            color: #fff9;
+            text-shadow: 0 0 2vmin #fff5;
         }
         > .Star-3 {
-            font-size: 7vmin;
-            top: -2vmin;
+            color: #ffff;
+            text-shadow: 0 0 4vmin #fff5;
         }
         .generate-stars(12);
 
