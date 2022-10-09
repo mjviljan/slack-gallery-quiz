@@ -84,11 +84,20 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         this.setState(this.getQuizStartState(FilterSelection.FAILURES))
     }
 
+    separateNameOptions = (combined: string): string[] => {
+        if (combined.indexOf("/") >= 0) {
+            return combined.split("/").map(s => s.trim())
+        }
+
+        return []
+    }
+
     isAnswerCorrect = (answer: string): boolean => {
         const lowerCaseAnswer = answer.toLowerCase()
         const correctAnswers = [
             this.state.currentUser.nickname.toLowerCase(),
             this.state.currentUser.firstName.toLowerCase(),
+            ...this.separateNameOptions(this.state.currentUser.nickname.toLowerCase())
         ]
 
         return correctAnswers.indexOf(lowerCaseAnswer) >= 0
