@@ -92,15 +92,25 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
         return []
     }
 
-    isAnswerCorrect = (answer: string): boolean => {
-        const lowerCaseAnswer = answer.toLowerCase()
-        const correctAnswers = [
-            this.state.currentUser.nickname.toLowerCase(),
-            this.state.currentUser.firstName.toLowerCase(),
-            ...this.separateNameOptions(this.state.currentUser.nickname.toLowerCase())
-        ]
+    normalizeString = (orig: string): string => {
+        const lowerCase = orig.toLowerCase()
+        return lowerCase
+            .replace(/[áàäå]/g, "a")
+            .replace(/[éèë]/g, "e")
+            .replace(/[íìï]/g, "i")
+            .replace(/[óòö]/g, "o")
+            .replace(/[úùü]/g, "u")
+    }
 
-        return correctAnswers.indexOf(lowerCaseAnswer) >= 0
+    isAnswerCorrect = (answer: string): boolean => {
+        const normalizedAnswer = this.normalizeString(answer)
+        const correctAnswers = [
+            this.state.currentUser.nickname,
+            this.state.currentUser.firstName,
+            ...this.separateNameOptions(this.state.currentUser.nickname)
+        ].map(ca => this.normalizeString(ca))
+
+        return correctAnswers.indexOf(normalizedAnswer) >= 0
     }
 
     onAnswerSubmit = (answer: string): void => {
