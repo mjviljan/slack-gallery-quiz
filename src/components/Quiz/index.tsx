@@ -95,11 +95,33 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
     normalizeString = (orig: string): string => {
         const lowerCase = orig.toLowerCase()
         return lowerCase
-            .replace(/[áàäå]/g, "a")
-            .replace(/[éèë]/g, "e")
-            .replace(/[íìï]/g, "i")
-            .replace(/[óòö]/g, "o")
-            .replace(/[úùü]/g, "u")
+            .replace(/[áàäâǎãåa̧]/g, "a")
+            .replace(/[éèëêěȩȩḝ]/g, "e")
+            .replace(/[íìïîǐi̧]/g, "i")
+            .replace(/[óòöôǒõo̧]/g, "o")
+            .replace(/[úùüûǔu̧]/g, "u")
+            .replace(/[ÿy̌]/g, "y")
+
+            .replace(/[b̌b]̧ /g, "b")
+            .replace(/[čçḉ]/g, "c")
+            .replace(/[ďḑ]/g, "d")
+            .replace(/f̌/g, "f")
+            .replace(/[ǧģ]/g, "g")
+            .replace(/[ȟḩ]/g, "h")
+            .replace(/ǰ/g, "j")
+            .replace(/[ǩķ]/g, "k")
+            .replace(/[ľļ]/g, "l")
+            .replace(/[m̌m̧]/g, "m")
+            .replace(/[ňñņ]/g, "n")
+            .replace(/p̌/g, "p")
+            .replace(/[q̌q̧]/g, "q")
+            .replace(/[řŗ]/g, "r")
+            .replace(/[šş]/g, "s")
+            .replace(/[ťţ]/g, "t")
+            .replace(/v̌/g, "v")
+            .replace(/w̌/g, "w")
+            .replace(/[x̌x̧]/g, "x")
+            .replace(/[žz̧]/g, "z")
     }
 
     isAnswerCorrect = (answer: string): boolean => {
