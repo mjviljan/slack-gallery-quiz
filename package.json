@@ -14,17 +14,17 @@
   "license": "MIT",
   "dependencies": {
     "@slack/client": "^5.0.2",
-    "@types/dotenv": "^8.2.0",
-    "@types/react": "^16.9.49",
-    "@types/react-dom": "^16.9.8",
     "dotenv": "^16.3.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "shuffle.ts": "^1.0.1"
   },
   "devDependencies": {
     "@google-cloud/functions-framework": "^3.3.0",
     "@types/node": "^20.4.5",
+    "@types/dotenv": "^8.2.0",
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
     "firebase": "^10.1.0",
     "firebase-tools": "^12.4.6",
     "less": "^4.1.3",
