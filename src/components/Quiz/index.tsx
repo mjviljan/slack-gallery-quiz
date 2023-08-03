@@ -20,7 +20,6 @@ export interface QuizState {
     nextUserImgUrl: string
     correctAnswers: number
     userImageLoaded: boolean
-    answerCorrect: boolean
     showCorrectAnswer: boolean
     failedGuessUsers: Array<string>
     previousFailures: Array<string>
@@ -64,7 +63,6 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
             nextUserImgUrl: includedUsers.length > 1 ? includedUsers[1].imageUrl : '',
             correctAnswers: 0,
             userImageLoaded: false,
-            answerCorrect: false,
             showCorrectAnswer: false,
             failedGuessUsers: [],
             previousFailures: previousFailures,
@@ -146,7 +144,6 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                     remainingUsers: this.state.remainingUsers.slice(1),
                     currentUser: this.state.remainingUsers[1],
                     correctAnswers: this.state.correctAnswers + 1,
-                    answerCorrect: true,
                 })
             } else {
                 this.setState({ quizEnded: true })
@@ -158,7 +155,6 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                 failedGuesses.push(currentUserId)
             }
             this.setState({
-                answerCorrect: false,
                 showCorrectAnswer: true,
                 failedGuessUsers: failedGuesses,
             })
@@ -205,7 +201,6 @@ export class Quiz extends React.Component<QuizProps, QuizState> {
                         <Controls
                             remaining={this.state.remainingUsers.length}
                             correctAnswers={this.state.correctAnswers}
-                            answerCorrect={this.state.answerCorrect}
                             showFailedGuessesOption={
                                 this.state.failedGuessUsers.length > 0 || this.state.previousFailures.length > 0
                             }
