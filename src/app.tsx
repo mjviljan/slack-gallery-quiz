@@ -31,9 +31,7 @@ onAuthStateChanged(auth, async user => {
     if (user && user.email && user.email.endsWith(`@${authOrg}`)) {
         fetch('/users')
             .then((data: Response) => data.json())
-            .then((users: Array<QuizUser>) => {
-                return ReactDOM.render(<Quiz users={users} />, root)
-            })
+            .then((users: Array<QuizUser>) => ReactDOM.render(<Quiz users={users} />, root))
     } else {
         await signInWithRedirect(auth, authProvider)
     }

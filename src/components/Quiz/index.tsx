@@ -1,5 +1,6 @@
 import shuffle from 'shuffle.ts'
 import * as React from 'react'
+import { useState } from 'react'
 
 import './index.less'
 
@@ -26,199 +27,198 @@ export interface QuizState {
     quizEnded: boolean
 }
 
-export class Quiz extends React.Component<QuizProps, QuizState> {
-    constructor(props: QuizProps) {
-        super(props)
-        this.state = this.getQuizStartState(FilterSelection.ALL)
-    }
+const getQuizStartState = (users: Array<QuizUser>, filterSelection: FilterSelection, failedGuessUsers: Array<String>): QuizState => {
+    const storedFailures = window.localStorage.getItem('failedGuesses')
+    const previousFailures: string[] = storedFailures ? JSON.parse(storedFailures) : []
 
-    getQuizStartState = (filterSelection: FilterSelection): QuizState => {
-        const storedFailures = window.localStorage.getItem('failedGuesses')
-        const previousFailures: string[] = storedFailures ? JSON.parse(storedFailures) : []
-
-        let includedUsers: Array<QuizUser>
-        if (filterSelection === FilterSelection.NEWEST10 || filterSelection === FilterSelection.NEWEST25) {
-            const allUsers = [...this.props.users]
-            const groupSize = (filterSelection === FilterSelection.NEWEST10 ? 10 : 25)
-            const newestBatch = allUsers.splice(allUsers.length - groupSize)
-            includedUsers = shuffle(newestBatch)
-        } else {
-            const shuffledUsers = shuffle(this.props.users)
-            if (filterSelection === FilterSelection.RND10) {
-                includedUsers = shuffledUsers.slice(0, 10)
-            } else if (filterSelection === FilterSelection.FAILURES) {
-                if (previousFailures.length > 0) {
-                    includedUsers = shuffledUsers.filter(u => previousFailures.indexOf(u.id) >= 0)
-                } else {
-                    includedUsers = shuffledUsers.filter(u => this.state.failedGuessUsers.indexOf(u.id) >= 0)
-                }
+    let includedUsers: Array<QuizUser>
+    if (filterSelection === FilterSelection.NEWEST10 || filterSelection === FilterSelection.NEWEST25) {
+        const allUsers = [...users]
+        const groupSize = (filterSelection === FilterSelection.NEWEST10 ? 10 : 25)
+        const newestBatch = allUsers.splice(allUsers.length - groupSize)
+        includedUsers = shuffle(newestBatch)
+    } else {
+        const shuffledUsers = shuffle(users)
+        if (filterSelection === FilterSelection.RND10) {
+            includedUsers = shuffledUsers.slice(0, 10)
+        } else if (filterSelection === FilterSelection.FAILURES) {
+            if (previousFailures.length > 0) {
+                includedUsers = shuffledUsers.filter(u => previousFailures.indexOf(u.id) >= 0)
             } else {
-                includedUsers = shuffledUsers
+                includedUsers = shuffledUsers.filter(u => failedGuessUsers.indexOf(u.id) >= 0)
             }
-        }
-        return {
-            selectedFilter: filterSelection,
-            remainingUsers: includedUsers,
-            currentUser: includedUsers[0],
-            nextUserImgUrl: includedUsers.length > 1 ? includedUsers[1].imageUrl : '',
-            correctAnswers: 0,
-            userImageLoaded: false,
-            showCorrectAnswer: false,
-            failedGuessUsers: [],
-            previousFailures: previousFailures,
-            quizEnded: false,
+        } else {
+            includedUsers = shuffledUsers
         }
     }
+    return {
+        selectedFilter: filterSelection,
+        remainingUsers: includedUsers,
+        currentUser: includedUsers[0],
+        nextUserImgUrl: includedUsers.length > 1 ? includedUsers[1].imageUrl : '',
+        correctAnswers: 0,
+        userImageLoaded: false,
+        showCorrectAnswer: false,
+        failedGuessUsers: [],
+        previousFailures: previousFailures,
+        quizEnded: false,
+    }
+}
 
-    onFilterSelected = (selection: FilterSelection) => {
-        this.setState(this.getQuizStartState(selection))
+export const Quiz = ({ users }: QuizProps) => {
+    const [quizState, setQuizState] = useState<QuizState>(getQuizStartState(users, FilterSelection.ALL, []))
+
+    const onFilterSelected = (selection: FilterSelection) => {
+        setQuizState(prevState => ({ ...prevState, ...getQuizStartState(users, selection, quizState.failedGuessUsers) }))
     }
 
-    onUserImageLoaded = () => {
-        this.setState({ userImageLoaded: true })
+    const onUserImageLoaded = () => {
+        setQuizState(prevState => ({ ...prevState, userImageLoaded: true }))
     }
 
-    restartWithFailedGuessed = () => {
-        this.setState(this.getQuizStartState(FilterSelection.FAILURES))
+    const restartWithFailedGuessed = () => {
+        setQuizState(prevState => ({ ...prevState, ...getQuizStartState(users, FilterSelection.FAILURES, quizState.failedGuessUsers) }))
     }
 
-    separateNameOptions = (combined: string): string[] => {
-        if (combined.indexOf("/") >= 0) {
-            return combined.split("/").map(s => s.trim())
+    const separateNameOptions = (combined: string): string[] => {
+        if (combined.indexOf('/') >= 0) {
+            return combined.split('/').map(s => s.trim())
         }
 
         return []
     }
 
-    normalizeString = (orig: string): string => {
+    const normalizeString = (orig: string): string => {
         const lowerCase = orig.toLowerCase()
         return lowerCase
-            .replace(/[áàäâǎãåa̧]/g, "a")
-            .replace(/[éèëêěȩȩḝ]/g, "e")
-            .replace(/[íìïîǐi̧]/g, "i")
-            .replace(/[óòöôǒõo̧]/g, "o")
-            .replace(/[úùüûǔu̧]/g, "u")
-            .replace(/[ÿy̌]/g, "y")
+            .replace(/[áàäâǎãåa̧]/g, 'a')
+            .replace(/[éèëêěȩȩḝ]/g, 'e')
+            .replace(/[íìïîǐi̧]/g, 'i')
+            .replace(/[óòöôǒõo̧]/g, 'o')
+            .replace(/[úùüûǔu̧]/g, 'u')
+            .replace(/[ÿy̌]/g, 'y')
 
-            .replace(/[b̌b]̧ /g, "b")
-            .replace(/[čçḉ]/g, "c")
-            .replace(/[ďḑ]/g, "d")
-            .replace(/f̌/g, "f")
-            .replace(/[ǧģ]/g, "g")
-            .replace(/[ȟḩ]/g, "h")
-            .replace(/ǰ/g, "j")
-            .replace(/[ǩķ]/g, "k")
-            .replace(/[ľļ]/g, "l")
-            .replace(/[m̌m̧]/g, "m")
-            .replace(/[ňñņ]/g, "n")
-            .replace(/p̌/g, "p")
-            .replace(/[q̌q̧]/g, "q")
-            .replace(/[řŗ]/g, "r")
-            .replace(/[šş]/g, "s")
-            .replace(/[ťţ]/g, "t")
-            .replace(/v̌/g, "v")
-            .replace(/w̌/g, "w")
-            .replace(/[x̌x̧]/g, "x")
-            .replace(/[žz̧]/g, "z")
+            .replace(/[b̌b]̧ /g, 'b')
+            .replace(/[čçḉ]/g, 'c')
+            .replace(/[ďḑ]/g, 'd')
+            .replace(/f̌/g, 'f')
+            .replace(/[ǧģ]/g, 'g')
+            .replace(/[ȟḩ]/g, 'h')
+            .replace(/ǰ/g, 'j')
+            .replace(/[ǩķ]/g, 'k')
+            .replace(/[ľļ]/g, 'l')
+            .replace(/[m̌m̧]/g, 'm')
+            .replace(/[ňñņ]/g, 'n')
+            .replace(/p̌/g, 'p')
+            .replace(/[q̌q̧]/g, 'q')
+            .replace(/[řŗ]/g, 'r')
+            .replace(/[šş]/g, 's')
+            .replace(/[ťţ]/g, 't')
+            .replace(/v̌/g, 'v')
+            .replace(/w̌/g, 'w')
+            .replace(/[x̌x̧]/g, 'x')
+            .replace(/[žz̧]/g, 'z')
     }
 
-    isAnswerCorrect = (answer: string): boolean => {
-        const normalizedAnswer = this.normalizeString(answer)
+    const isAnswerCorrect = (answer: string): boolean => {
+        const normalizedAnswer = normalizeString(answer)
         const correctAnswers = [
-            this.state.currentUser.nickname,
-            this.state.currentUser.firstName,
-            ...this.separateNameOptions(this.state.currentUser.nickname)
-        ].map(ca => this.normalizeString(ca))
+            quizState.currentUser.nickname,
+            quizState.currentUser.firstName,
+            ...separateNameOptions(quizState.currentUser.nickname),
+        ].map(ca => normalizeString(ca))
 
         return correctAnswers.indexOf(normalizedAnswer) >= 0
     }
 
-    onAnswerSubmit = (answer: string): void => {
-        this.setState({
-            nextUserImgUrl: this.state.remainingUsers.length > 2 ? this.state.remainingUsers[2].imageUrl : '',
-            userImageLoaded: false
-        })
-        if (this.isAnswerCorrect(answer)) {
-            if (this.state.remainingUsers.length > 1) {
-                this.setState({
-                    remainingUsers: this.state.remainingUsers.slice(1),
-                    currentUser: this.state.remainingUsers[1],
-                    correctAnswers: this.state.correctAnswers + 1,
-                })
+    const onAnswerSubmit = (answer: string): void => {
+        setQuizState(prevState => ({
+            ...prevState,
+            nextUserImgUrl: quizState.remainingUsers.length > 2 ? quizState.remainingUsers[2].imageUrl : '',
+            userImageLoaded: false,
+        }))
+        if (isAnswerCorrect(answer)) {
+            if (quizState.remainingUsers.length > 1) {
+                setQuizState(prevState => ({
+                    ...prevState,
+                    remainingUsers: quizState.remainingUsers.slice(1),
+                    currentUser: quizState.remainingUsers[1],
+                    correctAnswers: quizState.correctAnswers + 1,
+                }))
             } else {
-                this.setState({ quizEnded: true })
+                setQuizState(prevState => ({ ...prevState, quizEnded: true }))
             }
         } else {
-            const failedGuesses = this.state.failedGuessUsers
-            const currentUserId = this.state.currentUser.id
+            const failedGuesses = quizState.failedGuessUsers
+            const currentUserId = quizState.currentUser.id
             if (failedGuesses.indexOf(currentUserId) === -1) {
                 failedGuesses.push(currentUserId)
             }
-            this.setState({
+            setQuizState(prevState => ({
+                ...prevState,
                 showCorrectAnswer: true,
                 failedGuessUsers: failedGuesses,
-            })
+            }))
             setTimeout(() => {
-                const allUsers = this.state.remainingUsers.slice(1)
-                allUsers.push(this.state.currentUser)
-                this.setState({
+                const allUsers = quizState.remainingUsers.slice(1)
+                allUsers.push(quizState.currentUser)
+                setQuizState(prevState => ({
+                    ...prevState,
                     remainingUsers: allUsers,
                     currentUser: allUsers[0],
                     showCorrectAnswer: false,
-                })
+                }))
             }, 3000)
         }
     }
 
-    getQuestionAreaComponentToShow() {
-        if (this.state.showCorrectAnswer) {
-            return <WrongAnswerFeedback user={this.state.currentUser}/>
+    const getQuestionAreaComponentToShow = () => {
+        if (quizState.showCorrectAnswer) {
+            return <WrongAnswerFeedback user={quizState.currentUser} />
         }
 
         return <QuestionForm
-            user={this.state.currentUser}
-            answerHandler={this.onAnswerSubmit}
-            userImageLoaded={this.state.userImageLoaded}
-            imageOnloadHandler={this.onUserImageLoaded}/>
+            user={quizState.currentUser}
+            answerHandler={onAnswerSubmit}
+            userImageLoaded={quizState.userImageLoaded}
+            imageOnloadHandler={onUserImageLoaded} />
     }
 
-    getNextImagePreloadComponent() {
-        if (this.state.nextUserImgUrl) {
-            return <link rel="prefetch" href={this.state.nextUserImgUrl}/>
+    const getNextImagePreloadComponent = () => {
+        if (quizState.nextUserImgUrl) {
+            return <link rel='prefetch' href={quizState.nextUserImgUrl} />
         }
 
         // just return a "no-op" component
         return <a />
     }
 
-    render() {
-        if (!this.state.quizEnded) {
-            return (
-                <div className="Quiz">
-                    {this.getNextImagePreloadComponent()}
-                    <div className="QuestionContainer">{this.getQuestionAreaComponentToShow()}</div>
-                    <div className="ControlsContainer">
-                        <Controls
-                            remaining={this.state.remainingUsers.length}
-                            correctAnswers={this.state.correctAnswers}
-                            showFailedGuessesOption={
-                                this.state.failedGuessUsers.length > 0 || this.state.previousFailures.length > 0
-                            }
-                            selectedFilter={this.state.selectedFilter}
-                            filterSelectionHandler={this.onFilterSelected}
-                        />
-                    </div>
-                </div>
-            )
-        } else {
-            window.localStorage.setItem('failedGuesses', JSON.stringify(this.state.failedGuessUsers))
-            return (
-                <div className="Finished">
-                    <QuizFinished
-                        restartFunction={this.state.failedGuessUsers.length > 0 ? this.restartWithFailedGuessed : null}
+    if (!quizState.quizEnded) {
+        return (
+            <div className='Quiz'>
+                {getNextImagePreloadComponent()}
+                <div className='QuestionContainer'>{getQuestionAreaComponentToShow()}</div>
+                <div className='ControlsContainer'>
+                    <Controls
+                        remaining={quizState.remainingUsers.length}
+                        correctAnswers={quizState.correctAnswers}
+                        showFailedGuessesOption={
+                            quizState.failedGuessUsers.length > 0 || quizState.previousFailures.length > 0
+                        }
+                        selectedFilter={quizState.selectedFilter}
+                        filterSelectionHandler={onFilterSelected}
                     />
                 </div>
-            )
-        }
+            </div>
+        )
+    } else {
+        window.localStorage.setItem('failedGuesses', JSON.stringify(quizState.failedGuessUsers))
+        return (
+            <div className='Finished'>
+                <QuizFinished
+                    restartFunction={quizState.failedGuessUsers.length > 0 ? restartWithFailedGuessed : null}
+                />
+            </div>
+        )
     }
 }
