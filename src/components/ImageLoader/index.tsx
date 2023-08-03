@@ -7,8 +7,8 @@ export interface ImageLoaderProps {
     imageOnloadHandler: () => void
 }
 
-export const ImageLoader = ({ userImageUrl, imageOnloadHandler }: ImageLoaderProps) =>
-    (
+export const ImageLoader = ({ userImageUrl, imageOnloadHandler }: ImageLoaderProps) => {
+    return (
         <div className='ImageLoader'>
             <div className='Circle'>
                 <div className='Hub' />
@@ -22,3 +22,4 @@ export const ImageLoader = ({ userImageUrl, imageOnloadHandler }: ImageLoaderPro
                  alt="Hidden placeholder for doggo's picture" />
         </div>
     )
+}
