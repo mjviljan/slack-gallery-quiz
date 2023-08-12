@@ -7,18 +7,17 @@ export interface AnswerFeedbackProps {
     user: QuizUser
 }
 
-export class WrongAnswerFeedback extends React.Component<AnswerFeedbackProps, {}> {
-    render() {
-        let correctAnswer = this.props.user.firstName
-        if (this.props.user.firstName.toLowerCase() !== this.props.user.nickname.toLowerCase()) {
-            correctAnswer += ` (${this.props.user.nickname})`
-        }
-        return (
-            <div className="AnswerFeedback">
-                <img src={this.props.user.imageUrl} />
-                <div className="Question">Not quite.</div>
-                <div className="CorrectAnswer">{correctAnswer}</div>
-            </div>
-        )
-    }
+export const WrongAnswerFeedback = ({ user }: AnswerFeedbackProps) => {
+    const correctAnswer =
+        (user.firstName.toLowerCase() !== user.nickname.toLowerCase())
+            ? `${user.firstName} (${user.nickname})`
+            : user.firstName
+
+    return (
+        <div className='AnswerFeedback'>
+            <img src={user.imageUrl}  alt="Picture of the doggo"/>
+            <div className='Question'>Not quite.</div>
+            <div className='CorrectAnswer'>{correctAnswer}</div>
+        </div>
+    )
 }

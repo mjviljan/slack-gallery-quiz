@@ -1,6 +1,6 @@
 {
   "name": "slack-gallery-quiz",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A quiz using Slack account images and asking the user to recognize the people",
   "main": "src/index.ts",
   "scripts": {
@@ -8,28 +8,36 @@
     "deploy": "yarn build && firebase deploy",
     "start": "yarn firebase serve --only functions,hosting",
     "setup": "yarn install && cd functions && yarn install && yarn build && cd ..",
+    "test": "jest",
     "tsc:watch": "tsc -w"
   },
   "author": "mjviljan",
   "license": "MIT",
   "dependencies": {
     "@slack/client": "^5.0.2",
-    "@types/dotenv": "^8.2.0",
-    "@types/react": "^16.9.49",
-    "@types/react-dom": "^16.9.8",
     "dotenv": "^16.3.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "shuffle.ts": "^1.0.1"
   },
   "devDependencies": {
     "@google-cloud/functions-framework": "^3.3.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/dotenv": "^8.2.0",
+    "@types/jest": "^29.5.3",
     "@types/node": "^20.4.5",
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
     "firebase": "^10.1.0",
     "firebase-tools": "^12.4.6",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.6.2",
+    "jest-environment-jsdom": "^29.6.2",
     "less": "^4.1.3",
     "parcel-bundler": "^1.12.5",
     "prettier": "^3.0.0",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.1.6"
   }
 }
