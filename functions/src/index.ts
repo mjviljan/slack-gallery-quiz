@@ -1,7 +1,10 @@
-import * as functions from 'firebase-functions'
+import { onRequest } from 'firebase-functions/v2/https'
+import { defineSecret } from 'firebase-functions/params'
 import { WebClient } from '@slack/client'
 import { QuizUser, UserListFetchResult } from './types'
 import { activeNonBotMainUsersOnly } from './userFilter'
+
+const config = defineSecret('SLACK_TOKEN')
 
 function getSlackUsers(token: string): Promise<Array<QuizUser>> {
     const web = new WebClient(token)
@@ -10,8 +13,11 @@ function getSlackUsers(token: string): Promise<Array<QuizUser>> {
     })
 }
 
-export const getUsers = functions.https.onRequest((request: functions.Request, response) => {
-    return getSlackUsers(functions.config().slack.token).then(userData => {
-        response.send(userData)
-    })
-})
+export const getUsers = onRequest(
+    { secrets: [config] },
+    (_req, res) => {
+        return getSlackUsers(config.value()).then(userData => {
+            res.send(userData)
+        })
+    },
+)

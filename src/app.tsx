@@ -2,7 +2,7 @@ import './styles/defaults.less'
 import './styles/keyframes.less'
 
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+import * as ReactDOM from 'react-dom/client'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithRedirect } from 'firebase/auth'
 import { getFirebaseAuth } from './firebase'
 import * as dotenv from 'dotenv'
@@ -12,27 +12,31 @@ import { QuizUser } from './types/types'
 
 dotenv.config()
 
-const root = document.getElementById('root')
-
 if (!process.env.GOOGLE_ORGANIZATION || process.env.GOOGLE_ORGANIZATION.length === 0) {
     throw new Error('App configuration is invalid: Google organization (for authentication) is missing')
 }
-const authOrg = process.env.GOOGLE_ORGANIZATION as string
+const authOrgEnv = process.env.GOOGLE_ORGANIZATION as string
+const authOrgs = authOrgEnv.toLowerCase().split(',')
 
-ReactDOM.render(<LoadingSpinner />, root)
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+root.render(<LoadingSpinner />)
 
 const authProvider = new GoogleAuthProvider()
 authProvider.addScope('email')
-authProvider.setCustomParameters({ 'hd': authOrg })
+authProvider.setCustomParameters({ 'hd': authOrgs[0] })
 
 const auth = getFirebaseAuth()
 
 onAuthStateChanged(auth, async user => {
-    if (user && user.email && user.email.endsWith(`@${authOrg}`)) {
-        fetch('/users')
-            .then((data: Response) => data.json())
-            .then((users: Array<QuizUser>) => ReactDOM.render(<Quiz users={users} />, root))
-    } else {
-        await signInWithRedirect(auth, authProvider)
+    if (user && user.email) {
+        const userEmailDomain = user.email.toLowerCase().split('@').pop() as string
+        if (authOrgs.includes(userEmailDomain)) {
+            fetch('/users')
+                .then((data: Response) => data.json())
+                .then((users: Array<QuizUser>) => root.render(<Quiz users={users} />))
+            return
+        }
     }
+
+    await signInWithRedirect(auth, authProvider)
 })
